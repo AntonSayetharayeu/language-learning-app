@@ -11,10 +11,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IUserService {
-    List<User> getAllUsers();
+
     List<UserDTO> findAllUsers();
 
-    Optional<User> findUserById(Long id);
+    Optional<UserDTO> findUserById(Long id);
 
     UserDTO createUser(RegisterDTO dto);
 

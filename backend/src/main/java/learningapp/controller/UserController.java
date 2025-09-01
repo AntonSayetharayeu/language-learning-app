@@ -13,7 +13,7 @@ import learningapp.service.interfaces.IUserService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/user")
 public class UserController {
     private final IUserService userService;
     private final UserMapper userMapper;
@@ -37,7 +37,7 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUserByID(@PathVariable Long id) {
         return userService.findUserById(id)
-                .map(user -> ResponseEntity.ok(userMapper.toResponseDTO(user)))
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 

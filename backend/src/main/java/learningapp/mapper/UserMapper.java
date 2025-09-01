@@ -20,6 +20,7 @@ public interface UserMapper {
     @Mapping(source = "username", target = "userName")
     @Mapping(source = "email", target = "userEmail")
     @Mapping(source = "createdAt", target = "userCreatedAt")
+    @Mapping(source = "role", target = "userRole")
     UserDTO toResponseDTO(User user);
 
     @Mapping(source = "id", target = "userID")

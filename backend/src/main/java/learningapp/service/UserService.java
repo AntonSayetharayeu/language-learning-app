@@ -22,6 +22,7 @@ import java.util.Optional;
 @Primary
 @Service
 public class UserService implements IUserService {
+
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
@@ -33,10 +34,6 @@ public class UserService implements IUserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
     public List<UserDTO> findAllUsers() {
         return userRepository.findAll()
                 .stream()
@@ -44,8 +41,8 @@ public class UserService implements IUserService {
                 .toList();
     }
 
-    public Optional<User> findUserById(Long id) {
-        return userRepository.findById(id);
+    public Optional<UserDTO> findUserById(Long id) {
+        return userRepository.findById(id).map(userMapper::toResponseDTO);
     }
 
     public UserDTO createUser(RegisterDTO dto){
@@ -68,7 +65,7 @@ public class UserService implements IUserService {
     }
 
     public UserDTO updateUser(Long id, UserUpdateDTO dto) {
-        User existingUser = findUserById(id)
+        User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
         userMapper.updateUserFromDto(dto, existingUser);

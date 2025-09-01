@@ -1,6 +1,9 @@
 package learningapp.dto.responce;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import learningapp.model.enums.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,4 +22,7 @@ public class UserDTO {
     private String userEmail;
     @JsonProperty
     private LocalDateTime userCreatedAt;
+    @JsonProperty
+    @Enumerated(EnumType.STRING)
+    private UserRole userRole;
 }
