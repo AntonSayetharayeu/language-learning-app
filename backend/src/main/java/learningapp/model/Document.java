@@ -1,6 +1,7 @@
 package learningapp.model;
 
 import jakarta.persistence.*;
+import learningapp.model.base.ModelClass;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

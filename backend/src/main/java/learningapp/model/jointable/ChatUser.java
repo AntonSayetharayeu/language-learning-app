@@ -1,6 +1,8 @@
-package learningapp.model;
+package learningapp.model.jointable;
 
 import jakarta.persistence.*;
+import learningapp.model.Chat;
+import learningapp.model.User;
 import learningapp.model.enums.ChatRole;
 import learningapp.model.id.ChatUserId;
 

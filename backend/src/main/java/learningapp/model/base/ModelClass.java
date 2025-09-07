@@ -1,4 +1,4 @@
-package learningapp.model;
+package learningapp.model.base;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

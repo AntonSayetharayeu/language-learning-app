@@ -3,6 +3,7 @@ package learningapp.model;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import learningapp.model.base.ModelClass;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

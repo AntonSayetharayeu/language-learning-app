@@ -2,7 +2,9 @@ package learningapp.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import learningapp.model.base.ModelClass;
 import learningapp.model.enums.UserRole;
+import learningapp.model.jointable.ChatUser;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

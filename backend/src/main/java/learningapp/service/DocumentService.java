@@ -43,7 +43,6 @@ public class DocumentService implements IDocumentService {
 
         existingDocument.setPath(document.getPath());
         existingDocument.setFileName(document.getFileName());
-        existingDocument.setOwner(document.getOwner());
 
         return repository.save(existingDocument);
     }

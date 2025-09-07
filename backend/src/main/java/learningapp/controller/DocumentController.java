@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/document")
+@RequestMapping("/api/document")
 public class DocumentController {
 
-    private IDocumentService documentService;
+    private final IDocumentService documentService;
 
-    private DocumentMapper documentMapper;
+    private final DocumentMapper documentMapper;
 
     @Autowired
     public DocumentController(IDocumentService documentService, DocumentMapper documentMapper) {

@@ -44,7 +44,6 @@ public class TopicService implements ITopicService {
         existingTopic.setTitle(topic.getTitle());
         existingTopic.setDescription(topic.getDescription());
         existingTopic.setStatus(topic.getStatus());
-        existingTopic.setAuthor(topic.getAuthor());
 
         return topicRepository.save(existingTopic);
     }

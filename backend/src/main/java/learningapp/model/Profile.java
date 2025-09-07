@@ -3,6 +3,7 @@ package learningapp.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import learningapp.model.base.ModelClass;
 import learningapp.model.enums.ProfileGender;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
