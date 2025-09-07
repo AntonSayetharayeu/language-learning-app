@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import learningapp.dto.request.ProfileRequestDTO;
 import learningapp.dto.responce.ProfileResponseDTO;
 import learningapp.mapper.ProfileMapper;
-import learningapp.service.ProfileService;
+import learningapp.service.interfaces.IProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +15,12 @@ import java.util.List;
 @RequestMapping(path = "/api/profile")
 public class ProfileController {
 
-    private final ProfileService profileService;
+    private final IProfileService profileService;
 
     private final ProfileMapper profileMapper;
 
     @Autowired
-    public ProfileController(ProfileService profileService, ProfileMapper profileMapper) {
+    public ProfileController(IProfileService profileService, ProfileMapper profileMapper) {
         this.profileService = profileService;
         this.profileMapper = profileMapper;
     }

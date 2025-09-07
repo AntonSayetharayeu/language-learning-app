@@ -1,8 +1,12 @@
 package learningapp.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
 @AttributeOverride(name = "createdAt", column = @Column(name = "added_at")) //Use createdAt as addedAt in DB.

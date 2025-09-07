@@ -34,9 +34,6 @@ public interface TopicMapper {
 
     @Named("mapAuthorIdToUser")
     default User mapAuthorIdToUser(Long authorId) {
-        if (authorId == null) {
-            return null;
-        }
-        return new User(authorId);
+        return authorId == null ? null : new User(authorId);
     }
 }

@@ -16,6 +16,7 @@ import learningapp.service.interfaces.IUserService;
 @RequestMapping("/api/auth")
 public class AuthController {
 
+    //TODO: prepare work for mapper and adjust Service layer.
     private final IUserService userService;
 
     @Autowired

@@ -15,6 +15,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
+
+    //TODO: prepare work for mapper and adjust Service layer.
     private final IUserService userService;
     private final UserMapper userMapper;
 
