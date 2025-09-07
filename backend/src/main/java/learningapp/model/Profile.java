@@ -3,9 +3,13 @@ package learningapp.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import learningapp.model.enums.UserGender;
+import learningapp.model.enums.ProfileGender;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
 public class Profile extends ModelClass {
@@ -15,7 +19,7 @@ public class Profile extends ModelClass {
     private String bio;
 
     @Enumerated(EnumType.STRING)
-    private UserGender gender;
+    private ProfileGender gender;
 
     public Profile(Long id) {
         super(id);

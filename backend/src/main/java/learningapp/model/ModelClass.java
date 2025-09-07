@@ -18,6 +18,7 @@ public abstract class ModelClass {
     @Setter(AccessLevel.NONE)
     private Long id;
 
+    @Setter(AccessLevel.NONE)
     private LocalDateTime createdAt;
 
     @PrePersist
