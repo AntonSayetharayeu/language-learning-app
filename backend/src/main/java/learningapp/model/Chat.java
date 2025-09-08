@@ -5,10 +5,14 @@ import learningapp.model.base.ModelClass;
 import learningapp.model.enums.ChatType;
 import learningapp.model.jointable.ChatUser;
 import learningapp.model.jointable.TopicChat;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
 public class Chat extends ModelClass {
@@ -21,7 +25,7 @@ public class Chat extends ModelClass {
     private List<ChatUser> chatUsers;
 
     @OneToMany(mappedBy = "chat")
-    private List<TopicChat> topicChatList;
+    private List<TopicChat> chatTopics;
 
     @OneToMany(mappedBy = "chat")
     private List<Message> chatMessages;

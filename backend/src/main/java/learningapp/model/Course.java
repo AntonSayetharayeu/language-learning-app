@@ -14,6 +14,10 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 public class Course extends ModelClass {
+    /***
+     * TODO: think about Course - Chat connectivity. So should be any dependency between them? - I think, yes.
+     * Maybe there should be additional step like some info with (e.g.how much time can You spend daily? are there days you cannot chat? etc.)
+     */
 
     @ManyToOne
     private Language nativeLanguage;

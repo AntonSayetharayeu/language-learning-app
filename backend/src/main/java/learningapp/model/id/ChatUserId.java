@@ -5,6 +5,7 @@ import jakarta.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
 
+@Deprecated
 @Embeddable
 public class ChatUserId implements Serializable {
 

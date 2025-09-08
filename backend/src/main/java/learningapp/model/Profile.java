@@ -3,6 +3,7 @@ package learningapp.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.OneToOne;
 import learningapp.model.base.ModelClass;
 import learningapp.model.enums.ProfileGender;
 import lombok.Getter;
@@ -21,6 +22,9 @@ public class Profile extends ModelClass {
 
     @Enumerated(EnumType.STRING)
     private ProfileGender gender;
+
+    @OneToOne
+    private User user;
 
     public Profile(Long id) {
         super(id);

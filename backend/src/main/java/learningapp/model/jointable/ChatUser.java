@@ -3,18 +3,21 @@ package learningapp.model.jointable;
 import jakarta.persistence.*;
 import learningapp.model.Chat;
 import learningapp.model.User;
+import learningapp.model.base.ModelClass;
 import learningapp.model.enums.ChatRole;
-import learningapp.model.id.ChatUserId;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
-public class ChatUser {
-
-    @EmbeddedId
-    private ChatUserId id;
-
-    private LocalDateTime enteredAt;
+@AttributeOverride(name = "createdAt", column = @Column(name = "entered_at")) //shows when User entered Chat
+//One of the Many-to-many relationship solutions - Surrogate key
+public class ChatUser extends ModelClass {
 
     private LocalDateTime leftAt;
 
@@ -22,17 +25,12 @@ public class ChatUser {
     private ChatRole chatRole;
 
     @ManyToOne
-    @MapsId("chatId") //Says: "Com'on, set the same value to the id." In such case to id.chatId
     private Chat chat;
 
     @ManyToOne
-    @MapsId("userId")
-    /*@JoinColumn(name = "user_id")*/
     private User user;
 
-    @PrePersist
-    public void prePersist() {
-        enteredAt = LocalDateTime.now();
-        leftAt = null;
+    public ChatUser(Long id) {
+        super(id);
     }
 }

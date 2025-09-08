@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
+//One of the Many-to-many relationship solutions - Embedded key
+//This solution is used because topic could be only added to the chat, not removed.
 public class TopicChat {
 
     @EmbeddedId
@@ -22,10 +24,12 @@ public class TopicChat {
     private Topic topic;
 
     @ManyToOne
-    @MapsId("chatId")
+    @MapsId("chatId") //Says: "Com'on, set the same value to the id." In such case to id.chatId
     private Chat chat;
 
     private LocalDateTime addedAt;
+
+    private LocalDateTime doneAt; //shows when topic was closed for specific chat.
 
     @PrePersist
     public void prePersist() {
