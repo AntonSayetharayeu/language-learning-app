@@ -27,7 +27,7 @@ public interface ChatMapper {
     @Mapping(source = "name", target = "chatName")
     @Mapping(source = "chatType", target = "chatType")
     @Mapping(source = "chatUsers", target = "chatParticipantsIds", qualifiedByName = "mapChatUsersToChatParticipantsIds")
-    @Mapping(source = "topicChatList", target = "chatTopicsIds", qualifiedByName = "mapChatTopicsToChatTopicsIds")
+    @Mapping(source = "chatTopics", target = "chatTopicsIds", qualifiedByName = "mapChatTopicsToChatTopicsIds")
     @Mapping(source = "chatMessages", target = "chatMessagesIds", qualifiedByName = "mapChatMessagesToChatMessagesIds")
     ChatResponseDTO toResponseDTO(Chat chat);
 

@@ -58,7 +58,7 @@ public class ChatService implements IChatService {
                 .collect(Collectors.toList());
 
         User creator = userRepository.findById(chatCreatorId)
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Creator user during Chat creation not found"))
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Creator user during Chat creation not found"));
         ChatUser creatorRelation = new ChatUser();
         creatorRelation.setUser(creator);
         creatorRelation.setChatRole(ChatRole.TEACHER);
