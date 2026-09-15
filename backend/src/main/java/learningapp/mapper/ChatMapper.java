@@ -12,6 +12,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,32 +34,55 @@ public interface ChatMapper {
 
     @Named("mapChatParticipantsIdsToChatUsers")
     default List<ChatUser> mapChatParticipantsIdsToChatUsers(List<Long> usersIds) {
-        return usersIds == null ? null : usersIds.stream()
-                .map(id -> {
-                    ChatUser chatUser = new ChatUser();
-                    chatUser.setUser(new User(id));
-                    return chatUser;
-                }).collect(Collectors.toList());
+        if (usersIds == null) {
+            return null;
+        }
+
+        List<ChatUser> chatUsers = new ArrayList<>(usersIds.size());
+        for (Long id : usersIds) {
+            ChatUser chatUser = new ChatUser();
+            chatUser.setUser(new User(id));
+            chatUsers.add(chatUser);
+        }
+        return chatUsers;
     }
 
     @Named("mapChatUsersToChatParticipantsIds")
     default List<Long> mapChatUsersToChatParticipantsIds(List<ChatUser> chatUsers) {
-        return chatUsers == null ? null : chatUsers.stream()
-                .map(chatUser -> chatUser.getUser().getId())
-                .collect(Collectors.toList());
+        if (chatUsers == null) {
+            return null;
+        }
+
+        List<Long> usersIds = new ArrayList<>(chatUsers.size());
+        for (ChatUser chatUser : chatUsers) {
+            usersIds.add(chatUser.getUser().getId());
+        }
+        return usersIds;
     }
 
     @Named("mapChatTopicsToChatTopicsIds")
     default List<Long> mapChatTopicsToChatTopicsIds(List<TopicChat> chatTopics) {
-        return chatTopics == null ? null : chatTopics.stream()
-                .map(topicChat -> topicChat.getTopic().getId())
-                .collect(Collectors.toList());
+        if (chatTopics == null) {
+            return null;
+        }
+
+        List<Long> topicIds = new ArrayList<>(chatTopics.size());
+        for (TopicChat topicChat : chatTopics) {
+            topicIds.add(topicChat.getTopic().getId());
+        }
+        return topicIds;
     }
 
     @Named("mapChatMessagesToChatMessagesIds")
     default List<Long> mapChatMessagesToChatMessagesIds(List<Message> messages) {
-        return messages == null ? null : messages.stream()
-                .map(ModelClass::getId)
-                .collect(Collectors.toList());
+        if (messages == null) {
+            return null;
+        }
+
+        List<Long> messageIds = new ArrayList<>(messages.size());
+        for (ModelClass message : messages) {
+            messageIds.add(message.getId());
+        }
+        return messageIds;
     }
 }

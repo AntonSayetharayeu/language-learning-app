@@ -17,7 +17,7 @@ import java.util.List;
 @Entity
 @Table(name = "\"app_user\"")
 public class User extends ModelClass {
-
+    @Column(unique = true)
     private String username;
 
     @Email
@@ -27,6 +27,9 @@ public class User extends ModelClass {
 
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    @OneToOne
+    private Profile profile;
 
     @OneToMany(mappedBy = "user")
     private List<ChatUser> chatUserList;

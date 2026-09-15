@@ -12,6 +12,12 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * This class is used for Bearer Authentication.
+ * It just specifies how we treat "user" while authenticating it.
+ * E.g. we could pass to core.userdetails.User any values for username and password params we would like.
+ */
+
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;

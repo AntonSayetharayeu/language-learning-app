@@ -23,9 +23,6 @@ public class Profile extends ModelClass {
     @Enumerated(EnumType.STRING)
     private ProfileGender gender;
 
-    @OneToOne
-    private User user;
-
     public Profile(Long id) {
         super(id);
     }

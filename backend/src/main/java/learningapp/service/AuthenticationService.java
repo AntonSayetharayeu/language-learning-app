@@ -1,6 +1,5 @@
 package learningapp.service;
 
-import learningapp.model.User;
 import learningapp.repository.UserRepository;
 import learningapp.security.jwt.JwtUtils;
 import learningapp.service.interfaces.IAuthenticationService;
@@ -28,9 +27,11 @@ public class AuthenticationService implements IAuthenticationService {
 
     @Override
     public String login(String username, String password) {
-        User user = userRepository.findByEmail(username)
+        userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
+        //Here we pass username, password based on UserDetailsServiceImpl implementation.
+        //So we pass here the same fields we used for core.userdetails.User constructor params.
         Authentication auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(username, password)
         );
