@@ -47,5 +47,3 @@ onMounted(() => {
     <RouterLink to="/">Return Back!</RouterLink>
   </div>
 </template>
-
-<style></style>

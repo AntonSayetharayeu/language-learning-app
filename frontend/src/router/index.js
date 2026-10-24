@@ -1,35 +1,60 @@
+import ChatsView from '@/views/ChatsView.vue';
+import ChatView from '@/views/ChatView.vue';
+import OffersView from '@/views/OffersView.vue';
+import PingsView from '@/views/PingsView.vue';
+import RequestsView from '@/views/RequestsView.vue';
 import { createRouter, createWebHistory } from 'vue-router';
-import TestView from '@/views/TestView.vue';
-import NewView from '@/views/NewView.vue';
-import HomeView from '@/views/HomeView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/test',
-      name: 'Test',
-      component: TestView,
+      path: '/',
+      redirect: { name: 'chats' },
+    },
+    {
+      path: '/chats',
+      name: 'chats',
+      component: ChatsView,
       meta: {
-        navType: 'test',
+        navType: 'chats',
         showNav: true, //use false to hide Navigation bar
       },
     },
     {
-      path: '/',
-      name: 'Home',
-      component: HomeView,
+      path: '/offers',
+      name: 'offers',
+      component: OffersView,
       meta: {
-        navType: 'public',
+        navType: 'offers',
         showNav: true,
       },
     },
     {
-      path: '/new-view',
-      name: 'New View',
-      component: NewView,
+      path: '/requests',
+      name: 'requests',
+      component: RequestsView,
       meta: {
-        navType: 'new',
+        navType: 'requests',
+        showNav: true,
+      },
+    },
+    {
+      path: '/pings',
+      name: 'pings',
+      component: PingsView,
+      meta: {
+        navType: 'pings',
+        showNav: true,
+      },
+    },
+    {
+      path: '/chat/:id',
+      name: 'chat',
+      component: ChatView,
+      props: true, // Automatically passes parameters form URL e.g. route.params.id in ChatView.vue
+      meta: {
+        navType: 'chats',
         showNav: true,
       },
     },

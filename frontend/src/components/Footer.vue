@@ -1,8 +1,8 @@
 <template>
   <footer class="footer">
-    <!-- class "footer" is defined in main.scss -->
+    <!-- class "footer" was added to main.scss -->
     <div class="container">
-      <p class="text-center">Hello, bitches!!!</p>
+      <p class="text-center">Hello, everyone!!!</p>
     </div>
   </footer>
 </template>

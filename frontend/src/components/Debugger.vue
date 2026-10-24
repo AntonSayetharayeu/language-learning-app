@@ -1,14 +1,22 @@
 <script setup>
+import { ref } from 'vue';
+
 const debug = ref(false);
 defineProps({
   someVar: {
     type: String,
     required: false,
   },
+  showDebugger: {
+    type: Boolean,
+    required: false,
+  },
 });
 </script>
 
-<template v-if="debug">DEBUG — Current someVar: "{{ someVar }}"</template>
+<template>
+  <p v-if="showDebugger">DEBUG — Current someVar: "{{ someVar }}"</p>
+</template>
 
 <style>
 debugger {

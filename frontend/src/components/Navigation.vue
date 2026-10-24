@@ -3,7 +3,7 @@ import Debugger from './Debugger.vue';
 
 defineProps({
   route: {
-    type: RouteLocationNormalizedLoaded,
+    type: Object,
     required: true,
   },
   navType: {
@@ -14,35 +14,47 @@ defineProps({
 </script>
 
 <template>
-  <Debugger />
-  <nav>
-    <div class="bg-success-subtle p-2">
-      <div class="nav nav-fill nav-justified nav-underline w-75">
-        <div class="nav-item">
-          <RouterLink
-            class="nav-link text-secondary"
-            :class="{ active: navType === 'public' }"
-            to="/"
-            >Home</RouterLink
-          >
-        </div>
-        <div class="nav-item">
-          <RouterLink
-            class="nav-link text-secondary"
-            :class="{ active: navType === 'new' }"
-            to="/new-view"
-            >New View</RouterLink
-          >
-        </div>
-        <div class="nav-item">
-          <RouterLink
-            class="nav-link text-secondary"
-            :class="{ active: navType === 'test' }"
-            to="/test"
-            >Test something</RouterLink
-          >
-        </div>
+  <Debugger :showDebugger="false" />
+  <nav class="navbar bg-success-subtle p-2">
+    <div class="container-fluid d-flex justify-content-start">
+      <div class="d-flex align-items-center gap-4">
+        <a class="navbar-brand" href="#">LLM</a>
+        <ul class="nav nav-underline">
+          <li class="nav-item">
+            <RouterLink
+              class="nav-link text-secondary"
+              :class="{ active: navType === 'chats' }"
+              to="/chats"
+              >CHATS</RouterLink
+            >
+          </li>
+          <li class="nav-item">
+            <RouterLink
+              class="nav-link text-secondary"
+              :class="{ active: navType === 'offers' }"
+              to="/offers"
+              >OFFERS</RouterLink
+            >
+          </li>
+          <li class="nav-item">
+            <RouterLink
+              class="nav-link text-secondary"
+              :class="{ active: navType === 'requests' }"
+              to="/requests"
+              >REQUESTS</RouterLink
+            >
+          </li>
+          <li class="nav-item">
+            <RouterLink
+              class="nav-link text-secondary"
+              :class="{ active: navType === 'pings' }"
+              to="/pings"
+              >PINGS</RouterLink
+            >
+          </li>
+        </ul>
       </div>
+      <img src="../assets/user.png" alt="profile" class="ms-auto rounded-circle profile-image" />
     </div>
   </nav>
 </template>

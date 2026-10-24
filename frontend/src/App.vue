@@ -10,7 +10,7 @@ const navType = computed(() => route.meta.navType);
 
 <template>
   <Navigation :route="route" :nav-type="navType" v-if="route.meta.showNav" />
-  <main role="main" class="container py-4 px-3 mx-auto">
+  <main role="main" class="py-4 px-3">
     <RouterView />
   </main>
   <Footer />
