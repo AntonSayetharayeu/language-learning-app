@@ -1,9 +1,6 @@
 import { ref } from 'vue';
 
-const initialLanguages = ['German', 'Polish', 'English', 'Spanish', 'French', 'Italian'];
-
-const storedLanguages = localStorage.getItem('app_languages');
-const languages = ref(storedLanguages ? JSON.parse(storedLanguages) : initialLanguages);
+const languages = ref(['German', 'Polish', 'English', 'Spanish', 'French', 'Italian']);
 
 export function useLanguages() {
   const getLanguageById = (id) => {

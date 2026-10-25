@@ -1,4 +1,4 @@
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useLanguages } from './languagesStore';
 
 const { getLanguageById } = useLanguages();
@@ -71,14 +71,15 @@ const initialChats = [
 
 const storedChats = localStorage.getItem('app_chats');
 const chats = ref(storedChats ? JSON.parse(storedChats) : initialChats);
-const activeChats = chats.value.filter((chat) => chat.isActive);
-const inactiveChats = chats.value.filter((chat) => !chat.isActive);
 
 const syncStorage = () => {
   localStorage.setItem('app_chats', JSON.stringify(chats.value));
 };
 
 export function useChats() {
+  const activeChats = computed(() => chats.value.filter((chat) => chat.isActive));
+  const archivedChats = computed(() => chats.value.filter((chat) => !chat.isActive));
+
   const createChat = (newChat) => {
     chats.value.push({ id: chats.value.length + 1, ...newChat });
     syncStorage();
@@ -99,7 +100,7 @@ export function useChats() {
   return {
     chats,
     activeChats,
-    inactiveChats,
+    archivedChats,
     createChat,
     archiveChat,
     getChatById,

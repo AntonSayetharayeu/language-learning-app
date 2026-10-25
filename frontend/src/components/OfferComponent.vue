@@ -30,11 +30,11 @@ const truncatedDescription = computed(() => {
   >
     <div>
       <div class="d-flex mb-1">
-        <span class="fw-bold me-2" style="width: 80px">Teaching</span>
+        <span class="offer-card-label fw-bold me-2">Teaching</span>
         <span class="text-dark">{{ offer.teaching }}</span>
       </div>
       <div class="d-flex mb-3">
-        <span class="fw-bold me-2" style="width: 80px">Native</span>
+        <span class="offer-card-label fw-bold me-2">Native</span>
         <span class="text-dark">{{ offer.native }}</span>
       </div>
 

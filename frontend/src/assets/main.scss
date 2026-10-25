@@ -67,6 +67,14 @@ img.big-image {
   transform: scale(1.01);
 }
 
+.bg-archived {
+  background-color: #e3dfc8;
+}
+
+.chat-card-large.bg-archived:hover {
+  background-color: #d6d2bb;
+}
+
 .chat-item-small {
   min-height: 0;
   cursor: pointer;
@@ -139,9 +147,21 @@ textarea.message-textarea {
 }
 // #endregion
 
+// #region TOPICS
+.topics-popup {
+  width: 250px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+// #endregion
+
 // #region OFFERS
 .offer-card {
   min-height: 300px;
+}
+
+.offer-card-label {
+  width: 80px;
 }
 
 button.offers-btn {
@@ -160,5 +180,15 @@ button.add-offer-btn {
 button.add-offer-btn:hover {
   background-color: #7ea896 !important;
   transform: scale(1.005);
+}
+
+.form-select,
+.form-control {
+  background-color: #ffffff;
+}
+.form-select:focus,
+.form-control:focus {
+  background-color: #ffffff;
+  box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25) !important;
 }
 // #endregion

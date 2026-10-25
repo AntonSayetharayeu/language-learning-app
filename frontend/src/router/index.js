@@ -1,3 +1,4 @@
+import ArchivedChatsView from '@/views/ArchivedChatsView.vue';
 import ChatsView from '@/views/ChatsView.vue';
 import ChatView from '@/views/ChatView.vue';
 import OfferFormView from '@/views/OfferFormView.vue';
@@ -20,6 +21,15 @@ const router = createRouter({
       meta: {
         navType: 'chats',
         showNav: true, //use false to hide Navigation bar
+      },
+    },
+    {
+      path: '/chats/archived',
+      name: 'archived-chats',
+      component: ArchivedChatsView,
+      meta: {
+        navType: 'chats',
+        showNav: true,
       },
     },
     {

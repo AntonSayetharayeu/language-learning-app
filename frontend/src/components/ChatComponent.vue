@@ -10,7 +10,11 @@ const props = defineProps({
     type: String,
     default: 'large',
   },
-  isActive: {
+  isSelected: {
+    type: Boolean,
+    default: false,
+  },
+  isArchived: {
     type: Boolean,
     default: false,
   },
@@ -26,12 +30,16 @@ const openChat = () => {
   <div
     v-if="size === 'large'"
     @click="openChat"
-    class="chat-card-large d-flex align-items-center bg-success-subtle p-3 mb-3 rounded-pill shadow-sm"
+    class="chat-card-large d-flex align-items-center p-3 mb-3 rounded-pill shadow-sm"
+    :class="isArchived ? 'bg-archived' : 'bg-success-subtle'"
   >
     <img src="@/assets/user.png" alt="profile" class="big-image rounded-circle me-4 ms-2" />
-    <div class="info">
+    <div class="info w-25">
       <h5 class="mb-1 fw-semibold text-dark">{{ chat.username }}</h5>
       <p class="mb-0 text-secondary">Learning: {{ chat.learning }}</p>
+    </div>
+    <div v-if="isArchived" class="flex-grow-1 d-flex justify-content-center pe-5">
+      <span class="fw-bold text-dark">= Archived =</span>
     </div>
   </div>
 
@@ -40,7 +48,7 @@ const openChat = () => {
     @click="openChat"
     class="chat-item-small d-flex align-items-center p-2 mb-2 rounded-pill"
     :class="
-      isActive ? 'bg-secondary bg-opacity-25 border border-secondary-subtle' : 'bg-success-subtle'
+      isSelected ? 'bg-secondary bg-opacity-25 border border-secondary-subtle' : 'bg-success-subtle'
     "
   >
     <img src="@/assets/user.png" alt="profile" class="image rounded-circle me-2 ms-1" />

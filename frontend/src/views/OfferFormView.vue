@@ -132,15 +132,3 @@ const goBack = () => {
     </div>
   </div>
 </template>
-
-<style scoped>
-.form-select,
-.form-control {
-  background-color: #ffffff;
-}
-.form-select:focus,
-.form-control:focus {
-  background-color: #ffffff;
-  box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25) !important;
-}
-</style>
