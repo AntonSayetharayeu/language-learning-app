@@ -5,6 +5,19 @@ defineProps({
     required: true,
   },
 });
+
+const formatMessageTime = (timestamp) => {
+  const date = new Date(timestamp);
+
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+  const year = date.getFullYear();
+
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+
+  return `${day}/${month}/${year} ${hours}:${minutes}`;
+};
 </script>
 
 <template>
@@ -18,7 +31,7 @@ defineProps({
     >
       <p class="mb-1 text-break">{{ message.text }}</p>
       <span v-if="message.time" class="message-time text-muted d-block text-end">{{
-        message.time
+        formatMessageTime(message.time)
       }}</span>
     </div>
   </div>

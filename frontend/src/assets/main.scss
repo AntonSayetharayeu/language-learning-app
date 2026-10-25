@@ -23,6 +23,26 @@ main {
   min-height: 0;
 }
 
+// #region IMAGE
+img.small-image {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+img.image {
+  height: 40px;
+  width: 40px;
+  object-fit: cover;
+}
+
+img.big-image {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+}
+// #endregion
+
 // #region FOOTER
 .footer {
   //TODO: Improve bug
@@ -31,14 +51,6 @@ main {
   line-height: 60px;
   background-color: #f5f5f5;
   flex-shrink: 0;
-}
-// #endregion
-
-// #region TAB BAR
-img.profile-image {
-  height: 35px;
-  width: 35px;
-  object-fit: cover;
 }
 // #endregion
 
@@ -64,19 +76,7 @@ img.profile-image {
   background-color: rgba(0, 0, 0, 0.08);
 }
 
-img.profile-image-large-chat {
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
-}
-
-img.profile-image-small-chat {
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-}
-
-.archieved-btn {
+button.archieved-btn {
   position: fixed; // Specific position on the screen
   bottom: 70px;
   right: 10px;
@@ -94,15 +94,9 @@ img.profile-image-small-chat {
     background-color 0.2s ease;
 }
 
-.archieved-btn:hover {
+button.archieved-btn:hover {
   background-color: #6c757d;
   transform: scale(1.05);
-}
-
-img.smaller-img-for-button {
-  width: 26px;
-  height: 26px;
-  object-fit: contain;
 }
 // #endregion
 
@@ -121,12 +115,6 @@ img.smaller-img-for-button {
   overflow-y: auto;
 }
 
-img.profile-in-chat {
-  width: 35px;
-  height: 35px;
-  object-fit: cover;
-}
-
 .message-bubble {
   max-width: 65%;
   min-width: 140px;
@@ -142,11 +130,6 @@ button.send-btn {
   min-height: 48px;
 }
 
-img.send-btn-image {
-  width: 18px;
-  height: 18px;
-}
-
 textarea.message-textarea {
   //TODO: Improve showing in 3 lines
   resize: none;
@@ -154,5 +137,28 @@ textarea.message-textarea {
   line-height: 1.5rem;
   overflow-y: auto;
 }
+// #endregion
 
+// #region OFFERS
+.offer-card {
+  min-height: 300px;
+}
+
+button.offers-btn {
+  width: 45px;
+  height: 45px;
+  min-width: 45px;
+  min-height: 45px;
+}
+
+button.add-offer-btn {
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+button.add-offer-btn:hover {
+  background-color: #7ea896 !important;
+  transform: scale(1.005);
+}
 // #endregion

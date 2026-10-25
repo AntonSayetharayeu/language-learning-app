@@ -54,7 +54,7 @@ defineProps({
           </li>
         </ul>
       </div>
-      <img src="../assets/user.png" alt="profile" class="ms-auto rounded-circle profile-image" />
+      <img src="@/assets/user.png" alt="profile" class="image ms-auto rounded-circle" />
     </div>
   </nav>
 </template>
