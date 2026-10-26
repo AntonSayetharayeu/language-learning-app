@@ -1,4 +1,7 @@
 <script setup>
+import { useUsers } from '@/services/usersStore';
+import { useRouter } from 'vue-router';
+
 const props = defineProps({
   navType: {
     type: String,
@@ -6,7 +9,14 @@ const props = defineProps({
   },
 });
 
-console.log(props.navType);
+const router = useRouter();
+
+const { logout } = useUsers();
+
+const handleLogout = () => {
+  logout();
+  router.push('/login');
+};
 
 const navLinks = [
   {
@@ -72,10 +82,14 @@ const navLinks = [
     </ul>
     <hr />
     <div class="px-2">
-      <RouterLink to="/" class="d-flex align-items-center link-dark text-decoration-none gap-2">
+      <a
+        href="#"
+        @click.prevent="handleLogout"
+        class="d-flex align-items-center link-dark text-decoration-none gap-2 cursor-pointer"
+      >
         <img src="@/assets/user.png" alt="admin profile" class="image rounded-circle shadow-sm" />
         <span class="fw-medium">Exit Admin</span>
-      </RouterLink>
+      </a>
     </div>
   </aside>
 </template>

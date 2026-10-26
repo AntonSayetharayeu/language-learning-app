@@ -12,10 +12,12 @@ import AdminUsersView from '@/views/admin/AdminUsersView.vue';
 import ArchivedChatsView from '@/views/ArchivedChatsView.vue';
 import ChatsView from '@/views/ChatsView.vue';
 import ChatView from '@/views/ChatView.vue';
+import LoginView from '@/views/LoginView.vue';
 import OfferFormView from '@/views/OfferFormView.vue';
 import OffersView from '@/views/OffersView.vue';
 import PingsView from '@/views/PingsView.vue';
 import ProfileView from '@/views/ProfileView.vue';
+import RegisterView from '@/views/RegisterView.vue';
 import RequestFormView from '@/views/RequestFormView.vue';
 import RequestsView from '@/views/RequestsView.vue';
 import { createRouter, createWebHistory } from 'vue-router';
@@ -23,6 +25,18 @@ import { createRouter, createWebHistory } from 'vue-router';
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    {
+      path: '/register',
+      name: 'register',
+      component: RegisterView,
+      meta: { showNav: false },
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: LoginView,
+      meta: { showNav: false },
+    },
     {
       path: '/',
       name: 'home',
@@ -239,6 +253,21 @@ const router = createRouter({
       ],
     },
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = !!localStorage.getItem('app_session');
+
+  // Not logged in
+  if (!isAuthenticated && to.name !== 'login' && to.name !== 'register') {
+    next({ name: 'login' });
+  }
+  // Logged in
+  else if (isAuthenticated && (to.name === 'login' || to.name === 'register')) {
+    next({ name: 'chats' });
+  } else {
+    next();
+  }
 });
 
 export default router;

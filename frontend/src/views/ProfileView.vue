@@ -104,7 +104,7 @@ const saveProfile = () => {
         />
 
         <LanguageSelectorComponent
-          v-if="currentUser.role === 'student'"
+          v-if="currentUser?.role === 'student'"
           v-model="selectedLearnIds"
           title="languages to learn"
           badge-class="bg-success"

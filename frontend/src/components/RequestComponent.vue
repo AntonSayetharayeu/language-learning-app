@@ -83,7 +83,7 @@ const truncatedDescription = computed(() => {
 
       <div class="d-flex flex-column flex-grow-1">
         <h5 class="mb-1 fw-bold text-dark">{{ user.username }}</h5>
-        <div class="d-flex gap-2 mb-2">
+        <div class="d-flex flex-wrap gap-2 mb-2">
           <span class="badge bg-success bg-opacity-10 text-success border border-success-subtle">
             Learning: {{ request.learning }}
           </span>
