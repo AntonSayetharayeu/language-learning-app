@@ -1,4 +1,6 @@
 <script setup>
+import { useUsers } from '@/services/usersStore';
+import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 
 const props = defineProps({
@@ -21,6 +23,13 @@ const props = defineProps({
 });
 
 const router = useRouter();
+
+const { getUserById, getCurrentUser } = useUsers();
+const currentUser = computed(() => getCurrentUser());
+const partner = computed(() =>
+  getUserById(currentUser.value.role === 'lecturer' ? props.chat.studentId : props.chat.lecturerId),
+);
+
 const openChat = () => {
   router.push({ name: 'chat', params: { id: props.chat.id } });
 };
@@ -35,7 +44,7 @@ const openChat = () => {
   >
     <img src="@/assets/user.png" alt="profile" class="big-image rounded-circle me-4 ms-2" />
     <div class="info w-25">
-      <h5 class="mb-1 fw-semibold text-dark">{{ chat.username }}</h5>
+      <h5 class="mb-1 fw-semibold text-dark">{{ partner.username }}</h5>
       <p class="mb-0 text-secondary">Learning: {{ chat.learning }}</p>
     </div>
     <div v-if="isArchived" class="flex-grow-1 d-flex justify-content-center pe-5">
@@ -53,7 +62,7 @@ const openChat = () => {
   >
     <img src="@/assets/user.png" alt="profile" class="image rounded-circle me-2 ms-1" />
     <div class="flex-grow-1 d-flex justify-content-between align-items-center pe-2">
-      <span class="fw-semibold text-dark small">{{ chat.username }}</span>
+      <span class="fw-semibold text-dark small">{{ partner.username }}</span>
       <span class="text-muted small">{{ chat.learning }}</span>
     </div>
   </div>

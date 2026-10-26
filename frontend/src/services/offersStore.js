@@ -1,38 +1,46 @@
 import { ref } from 'vue';
+import { useLanguages } from './languagesStore';
+
+const { getLanguageById } = useLanguages();
 
 const initialOffers = [
   {
     id: 1,
-    teaching: 'German',
-    native: 'Polish',
+    lecturerId: 1,
+    teaching: getLanguageById(0),
+    native: getLanguageById(1),
     description:
       'The really really really really really really really really really really really really long',
   },
   {
     id: 2,
-    teaching: 'German',
-    native: 'Polish',
+    lecturerId: 1,
+    teaching: getLanguageById(1),
+    native: getLanguageById(2),
     description:
       'The really really really really really really really really really really really really long',
   },
   {
     id: 3,
-    teaching: 'German',
-    native: 'Polish',
+    lecturerId: 1,
+    teaching: getLanguageById(2),
+    native: getLanguageById(3),
     description:
       'The really really really longhe really really really longhe really really really longhe really really really long',
   },
   {
     id: 4,
-    teaching: 'German',
-    native: 'Polish',
+    lecturerId: 2,
+    teaching: getLanguageById(3),
+    native: getLanguageById(4),
     description:
       'The really really really really really really really really really really really really long',
   },
   {
     id: 5,
-    teaching: 'German',
-    native: 'Polish',
+    lecturerId: 2,
+    teaching: getLanguageById(4),
+    native: getLanguageById(5),
     description:
       'The really really really really really really really really really really really really long',
   },
@@ -68,11 +76,16 @@ export function useOffers() {
     return offers.value.find((o) => o.id === Number(id));
   };
 
+  const getOfferByLecturerId = (id) => {
+    return offers.value.filter((o) => o.lecturerId === Number(id));
+  };
+
   return {
     offers,
     addOffer,
     updateOffer,
     deleteOffer,
     getOfferById,
+    getOfferByLecturerId,
   };
 }

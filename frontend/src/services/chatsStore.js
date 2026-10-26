@@ -6,64 +6,33 @@ const { getLanguageById } = useLanguages();
 const initialChats = [
   {
     id: 1,
-    username: 'Username1',
+    lecturerId: 1,
+    studentId: 2,
     learning: getLanguageById(0),
     native: getLanguageById(2),
     isActive: true,
   },
   {
     id: 2,
-    username: 'Username2',
+    lecturerId: 1,
+    studentId: 3,
     learning: getLanguageById(1),
     native: getLanguageById(3),
     isActive: true,
   },
   {
     id: 3,
-    username: 'Username3',
+    lecturerId: 1,
+    studentId: 3,
     learning: getLanguageById(2),
     native: getLanguageById(5),
-    isActive: true,
-  },
-  {
-    id: 4,
-    username: 'Username4',
-    learning: getLanguageById(3),
-    native: getLanguageById(5),
-    isActive: false,
-  },
-  {
-    id: 5,
-    username: 'Username5',
-    learning: getLanguageById(4),
-    native: getLanguageById(0),
-    isActive: true,
-  },
-  {
-    id: 6,
-    username: 'Username6',
-    learning: getLanguageById(5),
-    native: getLanguageById(1),
     isActive: false,
   },
   {
     id: 7,
-    username: 'Username7',
-    learning: getLanguageById(0),
-    native: getLanguageById(2),
-    isActive: true,
-  },
-  {
-    id: 8,
-    username: 'Username8',
+    lecturerId: 8,
+    studentId: 3,
     learning: getLanguageById(1),
-    native: getLanguageById(2),
-    isActive: false,
-  },
-  {
-    id: 9,
-    username: 'Username9',
-    learning: getLanguageById(2),
     native: getLanguageById(3),
     isActive: true,
   },
@@ -86,15 +55,35 @@ export function useChats() {
   };
 
   const archiveChat = (id) => {
-    const index = chats.value.findIndex((o) => o.id === Number(id));
+    const index = chats.value.findIndex((c) => c.id === Number(id));
     if (index !== -1) {
-      chats.value[index] = { id: Number(id), isActive: false };
+      chats.value[index] = { ...chats.value[index], id: Number(id), isActive: false };
       syncStorage();
     }
   };
 
   const getChatById = (id) => {
-    return chats.value.find((o) => o.id === Number(id));
+    return chats.value.find((c) => c.id === Number(id));
+  };
+
+  const getActiveChatsByUserId = (userId) => {
+    return chats.value.filter(
+      (c) => (c.lecturerId === Number(userId) || c.studentId === Number(userId)) && c.isActive,
+    );
+  };
+
+  const getArchivedChatsByUserId = (userId) => {
+    return chats.value.filter(
+      (c) => (c.lecturerId === Number(userId) || c.studentId === Number(userId)) && !c.isActive,
+    );
+  };
+
+  const getChatPartnerId = (chatId, userId) => {
+    const chat = getChatById(chatId);
+    if (!chat) return null;
+
+    const numericUserId = Number(userId);
+    return chat.lecturerId === numericUserId ? chat.studentId : chat.lecturerId;
   };
 
   return {
@@ -104,5 +93,8 @@ export function useChats() {
     createChat,
     archiveChat,
     getChatById,
+    getActiveChatsByUserId,
+    getArchivedChatsByUserId,
+    getChatPartnerId,
   };
 }

@@ -104,7 +104,7 @@ const goBack = () => {
                 v-model="form.description"
                 rows="6"
                 placeholder="Write a detailed description of your offer..."
-                class="form-control border-0 shadow-sm p-3"
+                class="resize-none form-control border-0 shadow-sm p-3"
               ></textarea>
               <div class="form-text text-muted text-end mt-1">
                 {{ form.description.length }} characters

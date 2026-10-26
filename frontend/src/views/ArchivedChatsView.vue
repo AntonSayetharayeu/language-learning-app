@@ -2,15 +2,20 @@
 import { useRouter } from 'vue-router';
 import ChatComponent from '@/components/ChatComponent.vue';
 import { useChats } from '@/services/chatsStore';
+import { useUsers } from '@/services/usersStore';
+import { computed } from 'vue';
 
 const router = useRouter();
-const { archivedChats } = useChats();
+const { getArchivedChatsByUserId } = useChats();
+const { currentUserId } = useUsers();
+
+const userArchivedChats = computed(() => getArchivedChatsByUserId(currentUserId.value));
 </script>
 
 <template>
   <div class="container py-4 flex-grow-1">
     <ChatComponent
-      v-for="chat in archivedChats"
+      v-for="chat in userArchivedChats"
       :key="chat.id"
       :chat="chat"
       size="large"

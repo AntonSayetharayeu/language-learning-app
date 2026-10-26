@@ -1,16 +1,20 @@
 <script setup>
 import ChatComponent from '@/components/ChatComponent.vue';
 import { useChats } from '@/services/chatsStore';
+import { useUsers } from '@/services/usersStore';
+import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
-//TODO: Mock list should be fetched from backend
-const { activeChats } = useChats();
+const { getActiveChatsByUserId } = useChats();
+const { currentUserId } = useUsers();
+
+const userChats = computed(() => getActiveChatsByUserId(currentUserId.value));
 </script>
 
 <template>
   <div class="container py-4 flex-grow-1">
-    <ChatComponent v-for="chat in activeChats" :key="chat.id" :chat="chat" size="large" />
+    <ChatComponent v-for="chat in userChats" :key="chat.id" :chat="chat" size="large" />
   </div>
   <button
     class="archieved-btn rounded-circle shadow-lg"

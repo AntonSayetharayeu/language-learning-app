@@ -6,22 +6,78 @@ import MessageComponent from '@/components/MessageComponent.vue';
 import { useChats } from '@/services/chatsStore';
 import { useMessages } from '@/services/messagesStore';
 import { useTopics } from '@/services/topicsStore';
+import { useUsers } from '@/services/usersStore';
+import { useRatings } from '@/services/ratingsStore';
+import TopicsListComponent from '@/components/TopicsListComponent.vue';
 
 const route = useRoute();
 
-const { activeChats, getChatById } = useChats();
+const { getActiveChatsByUserId, getChatById, getChatPartnerId } = useChats();
+const { getMessagesByChatId, addMessage } = useMessages();
+const { currentUserId } = useUsers();
+const { addRating, updateRating, getRatingById, getRatingsByReporterAndPartnerId } = useRatings();
+
+const userChats = computed(() => getActiveChatsByUserId(currentUserId.value));
 const activeChatId = computed(() => Number(route.params.id));
 const actualChat = computed(() => getChatById(activeChatId.value));
 const isActiveChat = computed(() => actualChat.value.isActive);
 
-const { getMessagesByChatId, addMessage } = useMessages();
 const messages = computed(() => getMessagesByChatId(activeChatId.value));
-
 const newMessage = ref('');
 
-const { topics, getUniqueCategories, getTopicsByCategory } = useTopics();
 const showTopics = ref(false);
-const categories = computed(() => getUniqueCategories());
+
+const partnerId = computed(() => getChatPartnerId(activeChatId.value, currentUserId.value));
+
+const showRating = ref(false);
+const ratingValue = ref(0);
+const ratingText = ref('');
+const existingRatingId = ref(null);
+
+const toggleRating = () => {
+  showTopics.value = false;
+  showRating.value = !showRating.value;
+
+  if (showRating.value) {
+    const existing = getRatingsByReporterAndPartnerId(currentUserId.value, partnerId.value);
+
+    if (existing) {
+      existingRatingId.value = existing.id;
+      ratingValue.value = existing.value;
+      ratingText.value = existing.description;
+    } else {
+      existingRatingId.value = null;
+      ratingValue.value = 0;
+      ratingText.value = '';
+    }
+  }
+};
+
+const setRating = (val) => {
+  ratingValue.value = val;
+};
+
+const submitRating = () => {
+  if (ratingValue.value === 0) return;
+
+  const existing = getRatingById(existingRatingId.value);
+  if (existingRatingId.value) {
+    updateRating(existingRatingId.value, {
+      userId: existing.userId,
+      reporterId: existing.reporterId,
+      value: ratingValue.value,
+      description: ratingText.value,
+    });
+  } else {
+    addRating({
+      userId: partnerId.value,
+      reporterId: currentUserId.value,
+      value: ratingValue.value,
+      description: ratingText.value,
+    });
+  }
+  showRating.value = false;
+};
 
 const chatContainer = ref(null);
 const scrollToBottom = () => {
@@ -63,8 +119,14 @@ const archiveChat = () => {
 };
 
 const toggleTopics = () => {
+  showRating.value = false;
   showTopics.value = !showTopics.value;
 };
+
+watch(activeChatId, () => {
+  showTopics.value = false;
+  showRating.value = false;
+});
 </script>
 
 <template>
@@ -73,7 +135,7 @@ const toggleTopics = () => {
       <!-- Left Sidebar -->
       <div v-if="isActiveChat" class="col-md-3 border-end pe-3 overflow-y-auto h-100">
         <ChatComponent
-          v-for="chat in activeChats"
+          v-for="chat in userChats"
           :key="chat.id"
           :chat="chat"
           size="small"
@@ -115,38 +177,45 @@ const toggleTopics = () => {
                   >Topics</a
                 >
 
-                <!-- Topics -->
-                <div
-                  v-if="showTopics"
-                  class="topics-popup position-absolute bg-white border rounded shadow p-3 top-100 end-0 mt-2 z-3"
-                >
-                  <div
-                    class="d-flex justify-content-between align-items-center mb-2 border-bottom pb-1"
-                  >
-                    <h6 class="m-0 fw-bold">Conversation Topics</h6>
-                    <button
-                      type="button"
-                      class="btn-close"
-                      @click="showTopics = false"
-                      aria-label="close"
-                    ></button>
-                  </div>
-                  <div v-for="category in categories" :key="category" class="mb-3">
-                    <span class="text-secondary small fw-bold d-block mb-1">{{ category }}</span>
-                    <ul class="list-unstyled mb-0 ms-2">
-                      <li
-                        v-for="topic in getTopicsByCategory(category)"
-                        :key="topic.text"
-                        class="small text-dark mb-1"
-                      >
-                        • {{ topic.text }}
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+                <TopicsListComponent :showTopics="showTopics" />
               </div>
             </template>
-            <img src="@/assets/user.png" alt="profile icon" class="image rounded-circle" />
+
+            <!-- Rating -->
+            <div class="position-relative">
+              <img
+                src="@/assets/user.png"
+                alt="profile icon"
+                class="image rounded-circle border cursor-pointer"
+                @click="toggleRating"
+              />
+              <div
+                v-if="showRating"
+                class="rating-popup position-absolute bg-white border rounded shadow p-3 top-100 end-0 mt-2 z-3"
+              >
+                <div class="d-flex justify-content-center gap-2 mb-3">
+                  <img
+                    v-for="n in 5"
+                    :key="n"
+                    :src="n <= ratingValue ? '/src/assets/star.png' : '/src/assets/empty-star.png'"
+                    alt="star"
+                    class="small-image cursor-pointer"
+                    @click="setRating(n)"
+                  />
+                </div>
+
+                <textarea
+                  v-model="ratingText"
+                  class="resize-none form-control mb-3 text-secondary small bg-light border-0"
+                  rows="4"
+                  placeholder="Provide some thoughts about student..."
+                ></textarea>
+
+                <button class="btn btn-primary w-100 rounded-pill shadow-sm" @click="submitRating">
+                  {{ existingRatingId ? 'Update Review' : 'Leave the Review' }}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 

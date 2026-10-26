@@ -4,6 +4,7 @@ import OfferComponent from '@/components/OfferComponent.vue';
 import { useOffers } from '@/services/offersStore';
 
 const router = useRouter();
+//TODO: for Lecturer offers should be only from him
 const { offers, deleteOffer } = useOffers();
 
 const goToCreateOffer = () => {

@@ -23,6 +23,14 @@ main {
   min-height: 0;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
+textarea.resize-none {
+  resize: none;
+}
+
 // #region IMAGE
 img.small-image {
   width: 20px;
@@ -39,6 +47,12 @@ img.image {
 img.big-image {
   width: 60px;
   height: 60px;
+  object-fit: cover;
+}
+
+img.giant-image {
+  width: 80px;
+  height: 80px;
   object-fit: cover;
 }
 // #endregion
@@ -155,9 +169,22 @@ textarea.message-textarea {
 }
 // #endregion
 
+// #region RATING
+.rating-popup {
+  width: 280px;
+}
+// #endregion
+
 // #region OFFERS
 .offer-card {
   min-height: 300px;
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease;
+}
+.offer-card:hover {
+  background-color: #d1e7dd;
+  transform: scale(1.01);
 }
 
 .offer-card-label {
@@ -190,5 +217,23 @@ button.add-offer-btn:hover {
 .form-control:focus {
   background-color: #ffffff;
   box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25) !important;
+}
+// #endregion
+
+// #region REQUESTS
+.request-card {
+  height: 250px;
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.request-card-column {
+  width: 80px;
+}
+
+.request-card:hover {
+  background-color: #d1e7dd;
+  transform: scale(1.01);
 }
 // #endregion
