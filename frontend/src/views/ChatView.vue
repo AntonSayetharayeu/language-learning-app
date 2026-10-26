@@ -12,15 +12,16 @@ import { useRoute, useRouter } from 'vue-router';
 const route = useRoute();
 const router = useRouter();
 
-const { getActiveChatsByUserId, getChatById, getChatPartnerId } = useChats();
+const { getActiveChatsByUserId, getChatById, getChatPartnerId, archiveChat } = useChats();
 const { getMessagesByChatId, addMessage } = useMessages();
-const { currentUserId } = useUsers();
+const { currentUserId, getCurrentUser } = useUsers();
 const { addRating, updateRating, getRatingById, getRatingsByReporterAndPartnerId } = useRatings();
 
 const userChats = computed(() => getActiveChatsByUserId(currentUserId.value));
 const activeChatId = computed(() => Number(route.params.id));
 const actualChat = computed(() => getChatById(activeChatId.value));
 const isActiveChat = computed(() => actualChat.value.isActive);
+const isAdmin = computed(() => getCurrentUser().role === 'admin');
 
 const messages = computed(() => getMessagesByChatId(activeChatId.value));
 const newMessage = ref('');
@@ -111,10 +112,14 @@ const sendMessage = () => {
   newMessage.value = '';
 };
 
-const archiveChat = () => {
+const archiveChatToggle = () => {
   if (actualChat.value && confirm('Are you sure you want to archive this chat?')) {
-    actualChat.value.isActive = false;
-    router.push({ name: 'chats' });
+    archiveChat(activeChatId.value);
+    if (isAdmin.value) {
+      router.push({ name: 'admin-chats' });
+    } else {
+      router.push({ name: 'chats' });
+    }
   }
 };
 
@@ -133,7 +138,7 @@ watch(activeChatId, () => {
   <div class="container-fluid py-3 chat-screen-wrapper h-100">
     <div class="row g-3 h-100">
       <!-- Left Sidebar -->
-      <div v-if="isActiveChat" class="col-md-3 border-end pe-3 overflow-y-auto h-100">
+      <div v-if="isActiveChat && !isAdmin" class="col-md-3 border-end pe-3 overflow-y-auto h-100">
         <ChatComponent
           v-for="chat in userChats"
           :key="chat.id"
@@ -145,7 +150,7 @@ watch(activeChatId, () => {
 
       <!-- Chat Window -->
       <div
-        :class="isActiveChat ? 'col-md-9' : 'col-md-12'"
+        :class="isActiveChat && !isAdmin ? 'col-md-9' : 'col-md-12'"
         class="d-flex flex-column h-100 overflow-hidden"
       >
         <div
@@ -168,8 +173,10 @@ watch(activeChatId, () => {
           </div>
           <div class="d-flex align-items-center gap-3">
             <template v-if="isActiveChat">
-              <a href="#" @click.prevent="archiveChat" class="text-danger fw-semibold">Archive</a>
-              <div class="position-relative">
+              <a href="#" @click.prevent="archiveChatToggle" class="text-danger fw-semibold"
+                >Archive</a
+              >
+              <div v-if="!isAdmin" class="position-relative">
                 <a
                   href="#"
                   @click.prevent="toggleTopics"
@@ -182,7 +189,7 @@ watch(activeChatId, () => {
             </template>
 
             <!-- Rating -->
-            <div class="position-relative">
+            <div v-if="!isAdmin" class="position-relative">
               <img
                 src="@/assets/user.png"
                 alt="profile icon"
@@ -224,12 +231,17 @@ watch(activeChatId, () => {
           ref="chatContainer"
           class="chat flex-grow-1 p-3 mb-3 bg-white border rounded shadow-sm overflow-y-auto"
         >
-          <MessageComponent v-for="msg in messages" :key="msg.id" :message="msg" />
+          <MessageComponent
+            v-for="msg in messages"
+            :key="msg.id"
+            :message="msg"
+            :isAdmin="isAdmin"
+          />
         </div>
 
         <!-- Input Area -->
         <div class="flex-shrink-0 pb-2">
-          <div v-if="isActiveChat" class="d-flex align-items-center gap-2">
+          <div v-if="isActiveChat && !isAdmin" class="d-flex align-items-center gap-2">
             <div class="input-group bg-light rounded-pill px-3 py-1 border flex-grow-1">
               <textarea
                 type="text"
@@ -247,6 +259,12 @@ watch(activeChatId, () => {
             >
               <img src="@/assets/send.png" alt="icon" class="small-image" />
             </button>
+          </div>
+          <div
+            v-else-if="isAdmin"
+            class="text-center p-3 bg-light rounded border text-muted fw-semibold"
+          >
+            This chat is read-only for this User
           </div>
           <div v-else class="text-center p-3 bg-light rounded border text-muted fw-semibold">
             This chat is archived and is read-only

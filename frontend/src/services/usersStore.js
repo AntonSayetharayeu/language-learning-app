@@ -16,6 +16,8 @@ const initialUsers = computed(() => [
     rating: getAverageRating(4),
   },
   { id: 5, login: 'emma_w', password: '123', role: 'student', rating: getAverageRating(5) },
+  { id: 6, login: 'admin', password: 'admin', role: 'admin', rating: 0 },
+  { id: 7, login: 'sa', password: 'super', role: 'superAdmin', rating: 0 },
 ]);
 
 const storedUsers = localStorage.getItem('app_users');
@@ -26,7 +28,7 @@ const syncStorage = () => {
 };
 
 // Active user
-const currentUserId = ref(2);
+const currentUserId = ref(1);
 
 export function useUsers() {
   const { getProfileByUserId } = useProfiles();

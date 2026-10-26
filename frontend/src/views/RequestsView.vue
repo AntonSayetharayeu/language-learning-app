@@ -10,8 +10,6 @@ const router = useRouter();
 const { requests, getRequestByStudentId, deleteRequest } = useRequests();
 const { currentUserId, getCurrentUser } = useUsers();
 
-// Students manage the requests they created; lecturers browse every
-// student request and send a ping to the ones they want to teach.
 const isStudent = computed(() => getCurrentUser()?.role === 'student');
 
 const goToCreateRequest = () => {
@@ -30,7 +28,7 @@ const handleDelete = (id) => {
 </script>
 
 <template>
-  <!-- Student: manage own requests -->
+  <!-- Student -->
   <div v-if="isStudent" class="container py-4">
     <div class="mb-4">
       <button
@@ -49,10 +47,13 @@ const handleDelete = (id) => {
       >
         <ManageRequestComponent :request="req" @edit="handleEdit" @delete="handleDelete" />
       </div>
+      <div v-if="!getRequestByStudentId(currentUserId).length" class="text-center py-5 text-muted">
+        No requests found
+      </div>
     </div>
   </div>
 
-  <!-- Lecturer: browse all requests -->
+  <!-- Lecturer -->
   <div v-else class="container-fluid flex-grow-1 d-flex flex-column h-100 overflow-hidden">
     <div
       class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 align-content-start overflow-y-auto pb-4 px-2 m-0 flex-grow-1"
@@ -60,6 +61,7 @@ const handleDelete = (id) => {
       <div class="col" v-for="req in requests" :key="req.id">
         <RequestComponent :request="req" />
       </div>
+      <div v-if="!requests.length" class="text-center py-5 text-muted">No requests found</div>
     </div>
   </div>
 </template>

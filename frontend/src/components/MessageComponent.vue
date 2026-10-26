@@ -1,14 +1,27 @@
 <script setup>
 import { useUsers } from '@/services/usersStore';
+import { computed } from 'vue';
 
-defineProps({
+const props = defineProps({
+  isAdmin: {
+    type: Boolean,
+    default: false,
+  },
   message: {
     type: Object,
     required: true,
   },
 });
 
-const { currentUserId } = useUsers();
+const { currentUserId, getUserById } = useUsers();
+
+const isMessageSentVisibility = computed(() => {
+  if (props.isAdmin) {
+    console.log(getUserById(props.message.senderId).role === 'lecturer');
+    return getUserById(props.message.senderId).role === 'lecturer';
+  }
+  return props.message.senderId === currentUserId.value;
+});
 
 const formatMessageTime = (timestamp) => {
   const date = new Date(timestamp);
@@ -27,15 +40,11 @@ const formatMessageTime = (timestamp) => {
 <template>
   <div
     class="d-flex mb-3"
-    :class="message.senderId === currentUserId ? 'justify-content-end' : 'justify-content-start'"
+    :class="isMessageSentVisibility ? 'justify-content-end' : 'justify-content-start'"
   >
     <div
       class="message-bubble p-3 rounded-3 shadow-sm position-relative"
-      :class="
-        message.senderId === currentUserId
-          ? 'bg-light text-dark border'
-          : 'bg-white text-dark border'
-      "
+      :class="isMessageSentVisibility ? 'bg-light text-dark border' : 'bg-white text-dark border'"
     >
       <p class="mb-1 text-break">{{ message.text }}</p>
       <span v-if="message.time" class="message-time text-muted d-block text-end">{{

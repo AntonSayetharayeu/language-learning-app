@@ -1,9 +1,12 @@
 import AdminLayout from '@/layouts/AdminLayout.vue';
+import AdminChatsView from '@/views/admin/AdminChatsView.vue';
 import AdminDashboardView from '@/views/admin/AdminDashboardView.vue';
+import AdminLanguagesView from '@/views/admin/AdminLanguagesView.vue';
 import AdminOffersView from '@/views/admin/AdminOffersView.vue';
 import AdminPingsView from '@/views/admin/AdminPingsView.vue';
 import AdminRatingsView from '@/views/admin/AdminRatingsView.vue';
 import AdminRequestsView from '@/views/admin/AdminRequestsView.vue';
+import AdminTopicsView from '@/views/admin/AdminTopicsView.vue';
 import AdminUserFormView from '@/views/admin/AdminUserFormView.vue';
 import AdminUsersView from '@/views/admin/AdminUsersView.vue';
 import ArchivedChatsView from '@/views/ArchivedChatsView.vue';
@@ -22,6 +25,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
+      name: 'home',
       redirect: { name: 'chats' },
     },
     {
@@ -143,14 +147,22 @@ const router = createRouter({
             navType: 'admin',
           },
         },
-        // {
-        //   path: 'chats',
-        //   name: 'admin-chats',
-        //   component: AdminUsersView,
-        //   meta: {
-        //     navType: 'admin-chats',
-        //   },
-        // },
+        {
+          path: 'chats',
+          name: 'admin-chats',
+          component: AdminChatsView,
+          meta: {
+            navType: 'admin-chats',
+          },
+        },
+        {
+          path: 'chat/:id',
+          name: 'admin-chat-details',
+          component: ChatView,
+          meta: {
+            navType: 'admin-chats',
+          },
+        },
         {
           path: 'users',
           name: 'admin-users',
@@ -206,6 +218,22 @@ const router = createRouter({
           component: AdminRatingsView,
           meta: {
             navType: 'admin-ratings',
+          },
+        },
+        {
+          path: 'topics',
+          name: 'admin-topics',
+          component: AdminTopicsView,
+          meta: {
+            navType: 'admin-topics',
+          },
+        },
+        {
+          path: 'languages',
+          name: 'admin-languages',
+          component: AdminLanguagesView,
+          meta: {
+            navType: 'admin-languages',
           },
         },
       ],

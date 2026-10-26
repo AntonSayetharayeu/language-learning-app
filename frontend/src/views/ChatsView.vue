@@ -15,6 +15,7 @@ const userChats = computed(() => getActiveChatsByUserId(currentUserId.value));
 <template>
   <div class="container py-4 flex-grow-1">
     <ChatComponent v-for="chat in userChats" :key="chat.id" :chat="chat" size="large" />
+    <div v-if="!userChats.length" class="text-center py-5 text-muted">No chats found</div>
   </div>
   <button
     class="archieved-btn rounded-circle shadow-lg"

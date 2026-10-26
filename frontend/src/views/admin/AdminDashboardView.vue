@@ -67,10 +67,11 @@ const chartIData = computed(() => {
 // Chart 2
 const chartIIData = computed(() => {
   const usersWithLangs = users.value
+    .filter((u) => u.role === 'lecturer' || u.role === 'student')
     .map((u) => {
       const fullUser = getUserById(u.id);
-      const langCount = fullUser.knownLanguages.length || 0;
-      return { username: getProfileByUserId(u.id).username, role: u.role, count: langCount };
+      const langCount = fullUser.knownLanguages?.length || 0;
+      return { username: getProfileByUserId(u.id)?.username, role: u.role, count: langCount };
     })
     .sort((a, b) => b.count - a.count)
     .slice(0, 10);

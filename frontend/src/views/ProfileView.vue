@@ -1,9 +1,11 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { useProfiles } from '@/services/profilesStore';
 import LanguageSelectorComponent from '../components/LanguageSelectorComponent.vue';
 import { useUsers } from '@/services/usersStore.js';
+
+const router = useRouter();
 
 const { getProfileByUserId, updateProfile, DEFAULT_IMAGE } = useProfiles();
 const { getCurrentUser } = useUsers();
@@ -53,6 +55,7 @@ const saveProfile = () => {
     knownLanguages: [...selectedKnownIds.value],
     languagesToLearn: [...selectedLearnIds.value],
   });
+  router.push({ name: 'home' });
 };
 </script>
 

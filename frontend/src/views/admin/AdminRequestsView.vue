@@ -29,7 +29,7 @@ const enrichedRequests = computed(() => {
     <div class="d-flex flex-column">
       <AdminRequestComponent v-for="req in enrichedRequests" :key="req.id" :request="req" />
       <div v-if="!enrichedRequests.length" class="text-center py-5 text-muted">
-        No requests found.
+        No requests found
       </div>
     </div>
   </div>

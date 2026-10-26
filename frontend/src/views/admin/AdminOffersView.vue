@@ -28,7 +28,7 @@ const enrichedOffers = computed(() => {
     <div class="d-flex flex-column">
       <h3 class="fw-bold mb-4">Offers List</h3>
       <AdminOfferComponent v-for="offer in enrichedOffers" :key="offer.id" :offer="offer" />
-      <div v-if="!enrichedOffers.length" class="text-center py-5 text-muted">No offers found.</div>
+      <div v-if="!enrichedOffers.length" class="text-center py-5 text-muted">No offers found</div>
     </div>
   </div>
 </template>

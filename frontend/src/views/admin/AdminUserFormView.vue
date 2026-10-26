@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUsers } from '@/services/usersStore';
 import { useProfiles } from '@/services/profilesStore';
@@ -13,13 +13,13 @@ const props = defineProps({
 });
 
 const router = useRouter();
-const { users, getUserById, addUser, updateUser } = useUsers();
+const { users, getUserById, addUser, updateUser, getCurrentUser } = useUsers();
 const { getProfileByUserId, updateProfile, addProfile, DEFAULT_IMAGE } = useProfiles();
+const isSuperAdmin = computed(() => getCurrentUser()?.role === 'superAdmin');
 
 const isEditMode = ref(false);
 const fileInput = ref(null);
 
-// Form State
 const formData = ref({
   login: '',
   password: '',
@@ -154,7 +154,7 @@ const saveUser = () => {
               <!-- TODO: Move to a specific place -->
               <option value="student">Student</option>
               <option value="lecturer">Lecturer</option>
-              <option value="admin">Admin</option>
+              <option v-if="isSuperAdmin" value="admin">Admin</option>
             </select>
           </div>
         </div>

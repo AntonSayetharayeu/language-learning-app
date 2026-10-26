@@ -52,7 +52,7 @@ const syncStorage = () => {
 
 export function useTopics() {
   const addTopic = (topic) => {
-    basicTopics.value.push({ id: basicTopics.value.length, ...topic });
+    basicTopics.value.push({ id: basicTopics.value.length + 1, ...topic });
     syncStorage;
   };
 
@@ -64,9 +64,24 @@ export function useTopics() {
     return topics.value.filter((topic) => topic.category === category);
   };
 
+  const updateTopic = (id, updatedData) => {
+    const index = topics.value.findIndex((t) => t.id === Number(id));
+    if (index !== -1) {
+      topics.value[index] = { id: Number(id), ...updatedData };
+      syncStorage();
+    }
+  };
+
+  const deleteTopic = (id) => {
+    topics.value = topics.value.filter((t) => t.id !== Number(id));
+    syncStorage();
+  };
+
   return {
     topics,
     addTopic,
+    updateTopic,
+    deleteTopic,
     getUniqueCategories,
     getTopicsByCategory,
   };

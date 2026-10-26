@@ -10,7 +10,7 @@ console.log(props.navType);
 
 const navLinks = [
   {
-    navType: 'chats',
+    navType: 'admin-chats',
     label: 'Chats',
     to: '/admin/chats',
   },
@@ -39,8 +39,16 @@ const navLinks = [
     label: 'Ratings',
     to: '/admin/ratings',
   },
-  { label: 'Topics', to: '/admin/topics' },
-  { label: 'Languages', to: '/admin/languages' },
+  {
+    navType: 'admin-topics',
+    label: 'Topics',
+    to: '/admin/topics',
+  },
+  {
+    navType: 'admin-languages',
+    label: 'Languages',
+    to: '/admin/languages',
+  },
 ];
 </script>
 

@@ -26,12 +26,12 @@ const handleDelete = (id) => {
   }
 };
 
-console.log(offers);
+console.log(getOfferByLecturerId(currentUserId).length);
 </script>
 
 <template>
   <div class="container py-4">
-    <!-- Lecturer: manage own offers -->
+    <!-- Lecturer -->
     <template v-if="isLecturer">
       <div class="mb-4">
         <button
@@ -50,14 +50,18 @@ console.log(offers);
         >
           <OfferComponent :offer="offer" @edit="handleEdit" @delete="handleDelete" />
         </div>
+        <div v-if="!getOfferByLecturerId(currentUserId).length" class="text-center py-5 text-muted">
+          No offers found
+        </div>
       </div>
     </template>
 
-    <!-- Student: browse all offers -->
+    <!-- Student -->
     <div v-else class="row g-4">
       <div v-for="offer in offers" :key="offer.id" class="col-12 col-sm-6 col-lg-4">
         <BrowseOfferComponent :offer="offer" />
       </div>
+      <div v-if="!offers.length" class="text-center py-5 text-muted">No offers found</div>
     </div>
   </div>
 </template>
