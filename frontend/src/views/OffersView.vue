@@ -1,11 +1,16 @@
 <script setup>
+import { computed } from 'vue';
 import { useRouter } from 'vue-router';
+import BrowseOfferComponent from '@/components/BrowseOfferComponent.vue';
 import OfferComponent from '@/components/OfferComponent.vue';
 import { useOffers } from '@/services/offersStore';
+import { useUsers } from '@/services/usersStore';
 
 const router = useRouter();
-//TODO: for Lecturer offers should be only from him
-const { offers, deleteOffer } = useOffers();
+const { offers, getOfferByLecturerId, deleteOffer } = useOffers();
+const { currentUserId, getCurrentUser } = useUsers();
+
+const isLecturer = computed(() => getCurrentUser()?.role === 'lecturer');
 
 const goToCreateOffer = () => {
   router.push({ name: 'offer-creation' });
@@ -20,24 +25,38 @@ const handleDelete = (id) => {
     deleteOffer(id);
   }
 };
+
+console.log(offers);
 </script>
 
 <template>
   <div class="container py-4">
-    <!-- Add Offer -->
-    <div class="mb-4">
-      <button
-        @click="goToCreateOffer"
-        class="add-offer-btn btn btn-success bg-success-subtle text-dark border border-success-subtle w-100 py-3 rounded-pill fw-semibold shadow-sm"
-      >
-        Add New Offer
-      </button>
-    </div>
+    <!-- Lecturer: manage own offers -->
+    <template v-if="isLecturer">
+      <div class="mb-4">
+        <button
+          @click="goToCreateOffer"
+          class="add-offer-btn btn btn-success bg-success-subtle text-dark border border-success-subtle w-100 py-3 rounded-pill fw-semibold shadow-sm"
+        >
+          Add New Offer
+        </button>
+      </div>
 
-    <!-- Offers -->
-    <div class="row g-4">
-      <div v-for="offer in offers" :key="offer.id" class="col-12 col-sm-6 col-lg-3">
-        <OfferComponent :offer="offer" @edit="handleEdit" @delete="handleDelete" />
+      <div class="row g-4">
+        <div
+          v-for="offer in getOfferByLecturerId(currentUserId)"
+          :key="offer.id"
+          class="col-12 col-sm-6 col-lg-3"
+        >
+          <OfferComponent :offer="offer" @edit="handleEdit" @delete="handleDelete" />
+        </div>
+      </div>
+    </template>
+
+    <!-- Student: browse all offers -->
+    <div v-else class="row g-4">
+      <div v-for="offer in offers" :key="offer.id" class="col-12 col-sm-6 col-lg-4">
+        <BrowseOfferComponent :offer="offer" />
       </div>
     </div>
   </div>

@@ -1,6 +1,7 @@
 <script setup>
 import { useLanguages } from '@/services/languagesStore';
 import { useOffers } from '@/services/offersStore';
+import { useUsers } from '@/services/usersStore';
 import { ref, computed, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -8,6 +9,7 @@ const route = useRoute();
 const router = useRouter();
 const { addOffer, updateOffer, getOfferById } = useOffers();
 const { languages } = useLanguages();
+const { currentUserId } = useUsers();
 
 const EDIT_LABEL = 'Edit Offer';
 const CREATION_LABEL = 'Add New Offer';
@@ -17,12 +19,12 @@ const editMode = computed(() => !!offerId.value);
 const pageTitle = computed(() => (editMode.value ? EDIT_LABEL : CREATION_LABEL));
 
 const form = ref({
-  teaching: 'German',
-  native: 'Polish',
+  lecturerId: currentUserId.value,
+  teaching: '',
+  native: '',
   description: '',
 });
 
-// TODO:Implement via request
 onMounted(() => {
   if (editMode.value) {
     const existingOffer = getOfferById(offerId.value);

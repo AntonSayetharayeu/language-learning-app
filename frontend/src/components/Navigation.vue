@@ -1,4 +1,6 @@
 <script setup>
+import { computed } from 'vue';
+import { useUsers } from '@/services/usersStore';
 import Debugger from './Debugger.vue';
 
 defineProps({
@@ -11,6 +13,23 @@ defineProps({
     required: true,
   },
 });
+
+const { getCurrentUser } = useUsers();
+
+const navLinks = computed(() => {
+  const isStudent = getCurrentUser()?.role === 'student';
+
+  const offersLink = { navType: 'offers', to: '/offers', label: 'OFFERS' };
+  const requestsLink = { navType: 'requests', to: '/requests', label: 'REQUESTS' };
+
+  const middleLinks = isStudent ? [requestsLink, offersLink] : [offersLink, requestsLink];
+
+  return [
+    { navType: 'chats', to: '/chats', label: 'CHATS' },
+    ...middleLinks,
+    { navType: 'pings', to: '/pings', label: 'PINGS' },
+  ];
+});
 </script>
 
 <template>
@@ -20,41 +39,19 @@ defineProps({
       <div class="d-flex align-items-center gap-4">
         <a class="navbar-brand" href="#">LLM</a>
         <ul class="nav nav-underline">
-          <li class="nav-item">
+          <li class="nav-item" v-for="link in navLinks" :key="link.navType">
             <RouterLink
               class="nav-link text-secondary"
-              :class="{ active: navType === 'chats' }"
-              to="/chats"
-              >CHATS</RouterLink
-            >
-          </li>
-          <li class="nav-item">
-            <RouterLink
-              class="nav-link text-secondary"
-              :class="{ active: navType === 'offers' }"
-              to="/offers"
-              >OFFERS</RouterLink
-            >
-          </li>
-          <li class="nav-item">
-            <RouterLink
-              class="nav-link text-secondary"
-              :class="{ active: navType === 'requests' }"
-              to="/requests"
-              >REQUESTS</RouterLink
-            >
-          </li>
-          <li class="nav-item">
-            <RouterLink
-              class="nav-link text-secondary"
-              :class="{ active: navType === 'pings' }"
-              to="/pings"
-              >PINGS</RouterLink
+              :class="{ active: navType === link.navType }"
+              :to="link.to"
+              >{{ link.label }}</RouterLink
             >
           </li>
         </ul>
       </div>
-      <img src="@/assets/user.png" alt="profile" class="image ms-auto rounded-circle" />
+      <RouterLink to="/profile" class="ms-auto">
+        <img src="@/assets/user.png" alt="profile" class="image rounded-circle cursor-pointer" />
+      </RouterLink>
     </div>
   </nav>
 </template>

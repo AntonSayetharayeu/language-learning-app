@@ -30,7 +30,7 @@ const initialOffers = [
   },
   {
     id: 4,
-    lecturerId: 2,
+    lecturerId: 4,
     teaching: getLanguageById(3),
     native: getLanguageById(4),
     description:
@@ -38,7 +38,7 @@ const initialOffers = [
   },
   {
     id: 5,
-    lecturerId: 2,
+    lecturerId: 4,
     teaching: getLanguageById(4),
     native: getLanguageById(5),
     description:
@@ -56,6 +56,7 @@ const syncStorage = () => {
 export function useOffers() {
   const addOffer = (newOffer) => {
     offers.value.push({ id: offers.value.length + 1, ...newOffer });
+    console.log(offers.value);
     syncStorage();
   };
 

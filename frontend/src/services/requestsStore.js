@@ -68,11 +68,16 @@ export function useRequests() {
     return requests.value.find((o) => o.id === Number(id));
   };
 
+  const getRequestByStudentId = (id) => {
+    return requests.value.filter((o) => o.studentId === Number(id));
+  };
+
   return {
     requests,
     addRequest,
     updateRequest,
     deleteRequest,
     getRequestById,
+    getRequestByStudentId,
   };
 }

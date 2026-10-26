@@ -54,7 +54,6 @@ export function useRatings() {
 
     const sum = userRatings.reduce((acc, curr) => acc + curr.value, 0);
     const exactAverage = sum / userRatings.length;
-    console.log(exactAverage);
 
     return exactAverage;
   };

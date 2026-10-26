@@ -4,6 +4,8 @@ import ChatView from '@/views/ChatView.vue';
 import OfferFormView from '@/views/OfferFormView.vue';
 import OffersView from '@/views/OffersView.vue';
 import PingsView from '@/views/PingsView.vue';
+import ProfileView from '@/views/ProfileView.vue';
+import RequestFormView from '@/views/RequestFormView.vue';
 import RequestsView from '@/views/RequestsView.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
@@ -80,11 +82,39 @@ const router = createRouter({
       },
     },
     {
+      path: '/request',
+      name: 'request-creation',
+      component: RequestFormView,
+      meta: {
+        navType: 'requests',
+        showNav: true,
+      },
+    },
+    {
+      path: '/request/edit/:id',
+      name: 'request-edition',
+      component: RequestFormView,
+      props: true,
+      meta: {
+        navType: 'requests',
+        showNav: true,
+      },
+    },
+    {
       path: '/pings',
       name: 'pings',
       component: PingsView,
       meta: {
         navType: 'pings',
+        showNav: true,
+      },
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: ProfileView,
+      meta: {
+        navType: 'profile',
         showNav: true,
       },
     },

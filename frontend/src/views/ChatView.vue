@@ -1,16 +1,16 @@
 <script setup>
-import { ref, computed, onMounted, watch, nextTick } from 'vue';
-import { useRoute } from 'vue-router';
 import ChatComponent from '@/components/ChatComponent.vue';
 import MessageComponent from '@/components/MessageComponent.vue';
+import TopicsListComponent from '@/components/TopicsListComponent.vue';
 import { useChats } from '@/services/chatsStore';
 import { useMessages } from '@/services/messagesStore';
-import { useTopics } from '@/services/topicsStore';
-import { useUsers } from '@/services/usersStore';
 import { useRatings } from '@/services/ratingsStore';
-import TopicsListComponent from '@/components/TopicsListComponent.vue';
+import { useUsers } from '@/services/usersStore';
+import { computed, nextTick, onMounted, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
+const router = useRouter();
 
 const { getActiveChatsByUserId, getChatById, getChatPartnerId } = useChats();
 const { getMessagesByChatId, addMessage } = useMessages();
@@ -104,9 +104,9 @@ const sendMessage = () => {
   if (!newMessage.value.trim()) return;
   addMessage({
     chatId: activeChatId.value,
+    senderId: currentUserId.value,
     text: newMessage.value,
     time: Date.now(),
-    isOutgoing: true,
   });
   newMessage.value = '';
 };

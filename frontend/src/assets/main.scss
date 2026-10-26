@@ -32,6 +32,12 @@ textarea.resize-none {
 }
 
 // #region IMAGE
+img.tiny-image {
+  width: 10px;
+  height: 10px;
+  object-fit: contain;
+}
+
 img.small-image {
   width: 20px;
   height: 20px;
@@ -53,6 +59,12 @@ img.big-image {
 img.giant-image {
   width: 80px;
   height: 80px;
+  object-fit: cover;
+}
+
+.max-image {
+  width: 150px;
+  height: 150px;
   object-fit: cover;
 }
 // #endregion
@@ -235,5 +247,17 @@ button.add-offer-btn:hover {
 .request-card:hover {
   background-color: #d1e7dd;
   transform: scale(1.01);
+}
+// #endregion
+
+// #region PINGS
+.ping-card-label {
+  width: 50px;
+}
+// #endregion
+
+// #region PROFILE
+.profile-card {
+  max-width: 700px;
 }
 // #endregion

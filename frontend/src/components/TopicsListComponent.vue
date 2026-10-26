@@ -1,6 +1,6 @@
 <script setup>
 import { useTopics } from '@/services/topicsStore';
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 
 const props = defineProps({
   showTopics: {

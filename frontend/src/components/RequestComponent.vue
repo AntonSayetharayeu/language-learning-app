@@ -1,4 +1,5 @@
 <script setup>
+import { usePings } from '@/services/pingsStore';
 import { useUsers } from '@/services/usersStore';
 import { computed, ref } from 'vue';
 
@@ -9,9 +10,26 @@ const props = defineProps({
   },
 });
 
-const { getUserById } = useUsers();
+const { currentUserId, getUserById } = useUsers();
+const { isAlreadyPinged, addPing } = usePings();
 
+console.log(props.request.studentId);
 const user = computed(() => getUserById(props.request.studentId));
+
+const hasAlreadyPinged = computed(() =>
+  isAlreadyPinged(currentUserId.value, props.request.id, 'request'),
+);
+
+const sendPing = () => {
+  if (hasAlreadyPinged.value) return;
+
+  addPing({
+    senderId: currentUserId.value,
+    receiverId: props.request.studentId,
+    basedOnId: props.request.id,
+    basedOnType: 'request',
+  });
+};
 
 const fullStars = computed(() => Math.floor(user.value.rating));
 const hasHalfStar = computed(() => user.value.rating % 1 !== 0);
@@ -77,8 +95,12 @@ const truncatedDescription = computed(() => {
           {{ truncatedDescription }}
         </p>
 
-        <button class="btn btn-success rounded-pill fw-semibold shadow-sm w-100 mt-auto">
-          Accept Student
+        <button
+          :disabled="hasAlreadyPinged"
+          @click="sendPing"
+          class="btn btn-success rounded-pill fw-semibold shadow-sm w-100 mt-auto"
+        >
+          {{ hasAlreadyPinged ? 'Ping Sent' : 'Accept Student' }}
         </button>
       </div>
     </div>
