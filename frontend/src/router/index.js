@@ -1,3 +1,11 @@
+import AdminLayout from '@/layouts/AdminLayout.vue';
+import AdminDashboardView from '@/views/admin/AdminDashboardView.vue';
+import AdminOffersView from '@/views/admin/AdminOffersView.vue';
+import AdminPingsView from '@/views/admin/AdminPingsView.vue';
+import AdminRatingsView from '@/views/admin/AdminRatingsView.vue';
+import AdminRequestsView from '@/views/admin/AdminRequestsView.vue';
+import AdminUserFormView from '@/views/admin/AdminUserFormView.vue';
+import AdminUsersView from '@/views/admin/AdminUsersView.vue';
 import ArchivedChatsView from '@/views/ArchivedChatsView.vue';
 import ChatsView from '@/views/ChatsView.vue';
 import ChatView from '@/views/ChatView.vue';
@@ -117,6 +125,90 @@ const router = createRouter({
         navType: 'profile',
         showNav: true,
       },
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: AdminLayout,
+      meta: {
+        navType: 'admin',
+        showNav: false,
+      },
+      children: [
+        {
+          path: '',
+          name: 'admin-dashboard',
+          component: AdminDashboardView,
+          meta: {
+            navType: 'admin',
+          },
+        },
+        // {
+        //   path: 'chats',
+        //   name: 'admin-chats',
+        //   component: AdminUsersView,
+        //   meta: {
+        //     navType: 'admin-chats',
+        //   },
+        // },
+        {
+          path: 'users',
+          name: 'admin-users',
+          component: AdminUsersView,
+          meta: {
+            navType: 'admin-users',
+          },
+        },
+        {
+          path: 'users/create',
+          name: 'admin-user-create',
+          component: AdminUserFormView,
+          meta: {
+            navType: 'admin-users',
+          },
+        },
+        {
+          path: 'users/edit/:id',
+          name: 'admin-user-edit',
+          component: AdminUserFormView,
+          props: true,
+          meta: {
+            navType: 'admin-users',
+          },
+        },
+        {
+          path: 'offers',
+          name: 'admin-offers',
+          component: AdminOffersView,
+          meta: {
+            navType: 'admin-offers',
+          },
+        },
+        {
+          path: 'requests',
+          name: 'admin-requests',
+          component: AdminRequestsView,
+          meta: {
+            navType: 'admin-requests',
+          },
+        },
+        {
+          path: 'pings',
+          name: 'admin-pings',
+          component: AdminPingsView,
+          meta: {
+            navType: 'admin-pings',
+          },
+        },
+        {
+          path: 'ratings',
+          name: 'admin-ratings',
+          component: AdminRatingsView,
+          meta: {
+            navType: 'admin-ratings',
+          },
+        },
+      ],
     },
   ],
 });

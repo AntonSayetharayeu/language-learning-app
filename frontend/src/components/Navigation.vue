@@ -37,7 +37,7 @@ const navLinks = computed(() => {
   <nav class="navbar bg-success-subtle p-2">
     <div class="container-fluid d-flex justify-content-start">
       <div class="d-flex align-items-center gap-4">
-        <a class="navbar-brand" href="#">LLM</a>
+        <a class="navbar-brand fs-5 fw-bold text-success" href="/">LLM</a>
         <ul class="nav nav-underline">
           <li class="nav-item" v-for="link in navLinks" :key="link.navType">
             <RouterLink

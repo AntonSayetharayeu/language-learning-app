@@ -31,6 +31,28 @@ const currentUserId = ref(2);
 export function useUsers() {
   const { getProfileByUserId } = useProfiles();
 
+  const addUser = (newUser) => {
+    users.value.push({
+      id: users.value.length + 1,
+      ...newUser,
+      rating: getAverageRating(users.value.length + 1),
+    });
+    syncStorage();
+  };
+
+  const updateUser = (id, updatedData) => {
+    const index = users.value.findIndex((u) => u.id === Number(id));
+    if (index !== -1) {
+      users.value[index] = { id: Number(id), ...updatedData };
+      syncStorage();
+    }
+  };
+
+  const deleteUser = (id) => {
+    users.value = users.value.filter((u) => u.id !== Number(id));
+    syncStorage();
+  };
+
   const getUserById = (id) => {
     const user = users.value.find((u) => u.id === id);
     if (!user) return null;
@@ -50,6 +72,9 @@ export function useUsers() {
   return {
     users,
     currentUserId,
+    addUser,
+    updateUser,
+    deleteUser,
     getUserById,
     getCurrentUser,
     getUsersByRole,

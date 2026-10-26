@@ -261,3 +261,20 @@ button.add-offer-btn:hover {
   max-width: 700px;
 }
 // #endregion
+
+// #region ADMIN
+.admin-nav-sidebar {
+  width: 260px;
+}
+
+.nav-list-item:hover {
+  background-color: #7c7c7c;
+  color: black !important;
+  transform: scale(1.01);
+}
+
+.nav-list-item-active {
+  background-color: #7c7c7c;
+  color: black !important;
+}
+// #endregion

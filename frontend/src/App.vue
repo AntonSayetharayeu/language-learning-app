@@ -1,17 +1,24 @@
 <script setup>
-import { RouterView, useRoute } from 'vue-router';
-import Navigation from './components/Navigation.vue';
-import Footer from './components/Footer.vue';
 import { computed } from 'vue';
+import { RouterView, useRoute } from 'vue-router';
+import Footer from './components/Footer.vue';
+import Navigation from './components/Navigation.vue';
 
 const route = useRoute();
 const navType = computed(() => route.meta.navType);
+
+const isAdminRoute = computed(() => route.path.startsWith('/admin'));
 </script>
 
 <template>
-  <Navigation :route="route" :nav-type="navType" v-if="route.meta.showNav" />
-  <main role="main" class="px-3">
+  <template v-if="!isAdminRoute">
+    <Navigation :route="route" :nav-type="navType" v-if="route.meta.showNav" />
+    <main role="main" class="px-3">
+      <RouterView />
+    </main>
+    <Footer />
+  </template>
+  <template v-else>
     <RouterView />
-  </main>
-  <Footer />
+  </template>
 </template>

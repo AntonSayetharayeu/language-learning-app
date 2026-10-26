@@ -56,7 +56,6 @@ const syncStorage = () => {
 export function useOffers() {
   const addOffer = (newOffer) => {
     offers.value.push({ id: offers.value.length + 1, ...newOffer });
-    console.log(offers.value);
     syncStorage();
   };
 

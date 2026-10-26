@@ -1,9 +1,6 @@
 import { ref } from 'vue';
-import { useLanguages } from './languagesStore';
 
-const { getLanguageById } = useLanguages();
-
-const DEFAULT_IMAGE = 'src/assets/user.png';
+const DEFAULT_IMAGE = '/src/assets/user.png';
 
 const initialProfiles = [
   {
@@ -20,7 +17,7 @@ const initialProfiles = [
     username: 'Alex Johnson',
     imgUrl: DEFAULT_IMAGE,
     knownLanguages: [2, 3],
-    languagesToLearn: [1, 6],
+    languagesToLearn: [1, 5],
   },
   {
     id: 3,
@@ -56,6 +53,16 @@ const syncStorage = () => {
 };
 
 export function useProfiles() {
+  const addProfile = (newProfile) => {
+    profiles.value.push({ id: profiles.value.length + 1, ...newProfile });
+    syncStorage();
+  };
+
+  const deleteProfile = (id) => {
+    profiles.value = profiles.value.filter((p) => p.id !== Number(id));
+    syncStorage();
+  };
+
   const getProfileByUserId = (userId) => {
     return profiles.value.find((p) => p.userId === userId);
   };
@@ -71,6 +78,8 @@ export function useProfiles() {
   return {
     profiles,
     DEFAULT_IMAGE,
+    addProfile,
+    deleteProfile,
     getProfileByUserId,
     updateProfile,
   };
