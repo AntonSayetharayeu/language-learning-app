@@ -1,6 +1,5 @@
 <script setup>
 import { useTopics } from '@/services/topicsStore';
-import { computed } from 'vue';
 
 const props = defineProps({
   showTopics: {
@@ -9,9 +8,7 @@ const props = defineProps({
   },
 });
 
-const { getUniqueCategories, getTopicsByCategory } = useTopics();
-
-const categories = computed(() => getUniqueCategories());
+const { categories, getTopicsByCategory } = useTopics();
 </script>
 <template>
   <div

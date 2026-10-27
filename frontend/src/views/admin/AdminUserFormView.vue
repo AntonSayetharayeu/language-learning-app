@@ -51,8 +51,6 @@ onMounted(() => {
   }
 });
 
-console.log(users.value);
-
 const triggerFileInput = () => fileInput.value?.click();
 
 const handleFileChange = (event) => {

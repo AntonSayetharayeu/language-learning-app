@@ -1,9 +1,9 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useTopics } from '@/services/topicsStore';
 import AdminTopicComponent from '@/components/admin/AdminTopicComponent.vue';
 
-const { topics, addTopic, updateTopic, deleteTopic, getUniqueCategories } = useTopics();
+const { topics, categories, getAllTopics, addTopic, updateTopic, deleteTopic } = useTopics();
 
 const isEditing = ref(false);
 const editingId = ref(null);
@@ -13,7 +13,9 @@ const formData = ref({
   text: '',
 });
 
-const existingCategories = computed(() => getUniqueCategories());
+onMounted(async () => {
+  await getAllTopics();
+});
 
 const groupedTopics = computed(() => {
   return topics.value.reduce((acc, topic) => {
@@ -28,13 +30,13 @@ const handleSave = () => {
 
   if (isEditing.value) {
     updateTopic(editingId.value, {
-      category: formData.value.category.trim(),
       text: formData.value.text.trim(),
+      category: formData.value.category.trim(),
     });
   } else {
     addTopic({
-      category: formData.value.category.trim(),
       text: formData.value.text.trim(),
+      category: formData.value.category.trim(),
     });
   }
   resetForm();
@@ -85,7 +87,7 @@ const resetForm = () => {
                 />
                 <div class="d-flex flex-wrap gap-1">
                   <span
-                    v-for="cat in existingCategories"
+                    v-for="cat in categories"
                     :key="cat"
                     @click="formData.category = cat"
                     class="badge bg-light text-dark border cursor-pointer hover-bg-secondary"

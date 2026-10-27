@@ -7,25 +7,33 @@ import { useLanguages } from '@/services/languagesStore';
 import AdminUserComponent from '@/components/admin/AdminUserComponent.vue';
 
 const router = useRouter();
-const { users } = useUsers();
+const { users, getCurrentUser } = useUsers();
 const { getProfileByUserId, DEFAULT_IMAGE } = useProfiles();
 const { getLanguageById } = useLanguages();
 
 const usersList = computed(() => {
-  return users.value.map((user) => {
-    const profile = getProfileByUserId(user.id) || {};
+  return users.value
+    .filter(
+      (u) =>
+        ['lecturer', 'student'].includes(u.role) ||
+        (getCurrentUser().role === 'superAdmin' && u.role === 'admin'),
+    )
+    .map((user) => {
+      const profile = getProfileByUserId(user.id) || {};
 
-    const knownLangs = (profile.knownLanguages || []).map((id) => getLanguageById(id));
-    const learnLangs = (profile.languagesToLearn || []).map((id) => getLanguageById(id));
+      const knownLangs = (profile.knownLanguages || []).map((id) => getLanguageById(id));
+      const learnLangs = (profile.languagesToLearn || []).map((id) => getLanguageById(id));
 
-    return {
-      ...user,
-      username: profile.username || user.login,
-      imgUrl: profile.imgUrl || DEFAULT_IMAGE,
-      knownString: knownLangs.length ? knownLangs.join(', ') : 'None',
-      learnString: learnLangs.length ? learnLangs.join(', ') : 'None',
-    };
-  });
+      return {
+        ...user,
+        username: profile.username || user.login,
+        imgUrl: ['admin', 'superAdmin'].includes(user.role)
+          ? DEFAULT_IMAGE
+          : profile.imgUrl || DEFAULT_IMAGE,
+        knownString: knownLangs.length ? knownLangs.join(', ') : 'None',
+        learnString: learnLangs.length ? learnLangs.join(', ') : 'None',
+      };
+    });
 });
 
 const goToAddUser = () => {

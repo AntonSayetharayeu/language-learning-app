@@ -17,7 +17,6 @@ const { currentUserId, getUserById } = useUsers();
 
 const isMessageSentVisibility = computed(() => {
   if (props.isAdmin) {
-    console.log(getUserById(props.message.senderId).role === 'lecturer');
     return getUserById(props.message.senderId).role === 'lecturer';
   }
   return props.message.senderId === currentUserId.value;

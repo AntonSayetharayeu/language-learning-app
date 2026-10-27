@@ -64,8 +64,6 @@ export function useProfiles() {
   };
 
   const getProfileByUserId = (userId) => {
-    console.log(profiles.value);
-    console.log(userId);
     return profiles.value.find((p) => p.userId === userId);
   };
 

@@ -1,84 +1,93 @@
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
-const basicTopics = ref([
-  {
-    id: 1,
-    text: 'What does a typical day look like for you?',
-    category: 'Daily Life',
-  },
-  {
-    id: 2,
-    text: 'How do you usually spend your weekends?',
-    category: 'Daily Life',
-  },
-  {
-    id: 3,
-    text: 'What is your morning routine?',
-    category: 'Daily Life',
-  },
-  {
-    id: 4,
-    text: 'What kind of music are you into lately?',
-    category: 'Hobbies & Interests',
-  },
-  {
-    id: 5,
-    text: 'Do you play any sports or exercise regularly?',
-    category: 'Hobbies & Interests',
-  },
-  {
-    id: 6,
-    text: 'What was the last good movie or book you experienced?',
-    category: 'Hobbies & Interests',
-  },
-  {
-    id: 7,
-    text: "What is the most beautiful place you've ever visited?",
-    category: 'Travel & Culture',
-  },
-  {
-    id: 8,
-    text: 'If you could travel anywhere right now, where would it be?',
-    category: 'Travel & Culture',
-  },
-]);
-
-const storedTopics = localStorage.getItem('app_topics');
-const topics = ref(storedTopics ? JSON.parse(storedTopics) : basicTopics);
-
-const syncStorage = () => {
-  localStorage.setItem('app_topics', JSON.stringify(topics.value));
-};
+const API_BASE_URL = '/api/topics'; // Temp
 
 export function useTopics() {
-  const addTopic = (topic) => {
-    basicTopics.value.push({ id: basicTopics.value.length + 1, ...topic });
-    syncStorage;
+  const topics = ref([]);
+  const categories = computed(() => {
+    const allCategories = topics.value.map((topic) => topic.category);
+    return [...new Set(allCategories)];
+  });
+
+  const getAllTopics = async () => {
+    try {
+      const response = await fetch(API_BASE_URL);
+      if (response.ok) {
+        topics.value = await response.json();
+        return topics.value;
+      }
+    } catch (error) {
+      console.error('Error fetching all topics:', error);
+    }
+    return [];
   };
 
-  const getUniqueCategories = () => {
-    return [...new Set(topics.value.map((topic) => topic.category))];
+  const getTopicsByCategory = async (categoryLabel) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/category/${encodeURIComponent(categoryLabel)}`);
+      if (response.ok) {
+        topics.value = await response.json();
+        return topics.value;
+      }
+    } catch (error) {
+      console.error('Error fetching topics by category:', error);
+    }
+    return [];
   };
 
-  const getTopicsByCategory = (category) => {
-    return topics.value.filter((topic) => topic.category === category);
-  };
-
-  const updateTopic = (id, updatedData) => {
-    const index = topics.value.findIndex((t) => t.id === Number(id));
-    if (index !== -1) {
-      topics.value[index] = { id: Number(id), ...updatedData };
-      syncStorage();
+  const addTopic = async (newTopic) => {
+    try {
+      const response = await fetch(API_BASE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newTopic),
+      });
+      if (response.ok) {
+        const createdTopic = await response.json();
+        topics.value.push(createdTopic);
+        return createdTopic;
+      }
+    } catch (error) {
+      console.error('Error adding topic:', error);
     }
   };
 
-  const deleteTopic = (id) => {
-    topics.value = topics.value.filter((t) => t.id !== Number(id));
-    syncStorage();
+  const updateTopic = async (id, updatedData) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedData),
+      });
+      if (response.ok) {
+        const updatedTopic = await response.json();
+        const index = topics.value.findIndex((t) => t.id === Number(id));
+        if (index !== -1) {
+          topics.value[index] = updatedTopic;
+        }
+      }
+    } catch (error) {
+      console.error('Error updating topic:', error);
+    }
+  };
+
+  const deleteTopic = async (id) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/${id}`, {
+        method: 'DELETE',
+      });
+      if (response.ok) {
+        topics.value = topics.value.filter((t) => t.id !== Number(id));
+      }
+    } catch (error) {
+      console.error('Error deleting topic:', error);
+    }
   };
 
   return {
     topics,
+    categories,
+    getAllTopics,
     addTopic,
     updateTopic,
     deleteTopic,

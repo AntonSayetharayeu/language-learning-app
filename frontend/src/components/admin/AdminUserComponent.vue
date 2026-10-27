@@ -8,11 +8,7 @@ const props = defineProps({
     required: true,
   },
 });
-
-const { getProfileByUserId } = useProfiles();
-
 defineEmits(['edit']);
-const profile = computed(() => getProfileByUserId(props.user.id));
 </script>
 
 <template>
@@ -20,7 +16,7 @@ const profile = computed(() => getProfileByUserId(props.user.id));
     @click="$emit('edit', user.id)"
     class="chat-card-large d-flex align-items-center p-3 mb-3 rounded-pill shadow-sm bg-white border border-light cursor-pointer"
   >
-    <img :src="profile?.imgUrl" alt="profile" class="big-image rounded-circle me-4 ms-2 border" />
+    <img :src="user?.imgUrl" alt="profile" class="big-image rounded-circle me-4 ms-2 border" />
 
     <div class="flex-grow-1 d-flex flex-column justify-content-center">
       <div class="d-flex align-items-center gap-2 mb-1">

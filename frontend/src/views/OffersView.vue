@@ -25,8 +25,6 @@ const handleDelete = (id) => {
     deleteOffer(id);
   }
 };
-
-console.log(getOfferByLecturerId(currentUserId).length);
 </script>
 
 <template>

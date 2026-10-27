@@ -21,7 +21,7 @@ const userChats = computed(() => getActiveChatsByUserId(currentUserId.value));
 const activeChatId = computed(() => Number(route.params.id));
 const actualChat = computed(() => getChatById(activeChatId.value));
 const isActiveChat = computed(() => actualChat.value.isActive);
-const isAdmin = computed(() => getCurrentUser().role === 'admin');
+const isAdmin = computed(() => ['admin', 'superAdmin'].includes(getCurrentUser().role));
 
 const messages = computed(() => getMessagesByChatId(activeChatId.value));
 const newMessage = ref('');

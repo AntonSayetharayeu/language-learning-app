@@ -13,7 +13,6 @@ const props = defineProps({
 const { currentUserId, getUserById } = useUsers();
 const { isAlreadyPinged, addPing } = usePings();
 
-console.log(props.request.studentId);
 const user = computed(() => getUserById(props.request.studentId));
 
 const hasAlreadyPinged = computed(() =>
