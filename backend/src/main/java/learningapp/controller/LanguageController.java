@@ -1,62 +1,46 @@
 package learningapp.controller;
 
 import jakarta.validation.Valid;
+import learningapp.dto.common.LanguageDTO;
 import learningapp.dto.request.LanguageRequestDTO;
-import learningapp.dto.responce.LanguageResponseDTO;
-import learningapp.mapper.LanguageMapper;
-import learningapp.service.interfaces.ILanguageService;
-import org.springframework.beans.factory.annotation.Autowired;
+import learningapp.service.LanguageService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/api/language")
+@RequestMapping("/api/languages")
+@RequiredArgsConstructor
 public class LanguageController {
 
-    private final ILanguageService languageService;
-    private final LanguageMapper languageMapper;
-
-    @Autowired
-    public LanguageController(ILanguageService languageService, LanguageMapper languageMapper) {
-        this.languageService = languageService;
-        this.languageMapper = languageMapper;
-    }
+    private final LanguageService languageService;
 
     @GetMapping
-    public ResponseEntity<List<LanguageResponseDTO>> getAllLanguages() {
-        return ResponseEntity.ok(languageService.findAllLanguages()
-                .stream()
-                .map(languageMapper::toResponseDTO)
-                .toList());
+    public ResponseEntity<List<LanguageDTO>> getAllLanguages() {
+        return ResponseEntity.ok(languageService.getAllLanguages());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<LanguageResponseDTO> getLanguageByID(@PathVariable Long id) {
-        return languageService.findLanguageById(id)
-                .map(language -> ResponseEntity.ok(languageMapper.toResponseDTO(language)))
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<LanguageDTO> getLanguageById(@PathVariable Long id) {
+        return ResponseEntity.ok(languageService.getLanguageById(id));
     }
 
     @PostMapping
-    public ResponseEntity<LanguageResponseDTO> addNewLanguage(@Valid @RequestBody LanguageRequestDTO dto) {
-        return ResponseEntity.ok(
-                languageMapper.toResponseDTO(
-                        languageService.createLanguage(languageMapper.toEntity(dto))));
+    public ResponseEntity<LanguageDTO> addLanguage(@Valid @RequestBody LanguageRequestDTO dto) {
+        return ResponseEntity.ok(languageService.addLanguage(dto));
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<LanguageResponseDTO> updateLanguage(@PathVariable Long id, @Valid @RequestBody LanguageRequestDTO dto){
-        return ResponseEntity.ok(
-                languageMapper.toResponseDTO(
-                        languageService.updateLanguage(id, languageMapper.toEntity(dto))));
+    @PutMapping("/{id}")
+    public ResponseEntity<LanguageDTO> updateLanguage(@PathVariable Long id, @Valid @RequestBody LanguageRequestDTO dto) {
+        return ResponseEntity.ok(languageService.updateLanguage(id, dto));
     }
 
-    @DeleteMapping("/remove/{id}")
-    public ResponseEntity<LanguageResponseDTO> removeLanguage(@PathVariable Long id) {
-        return languageService.deleteLanguageById(id)
-                .map(language -> ResponseEntity.ok(languageMapper.toResponseDTO(language)))
-                .orElse(ResponseEntity.notFound().build());
+    @DeleteMapping("/{id}")
+    public ResponseEntity<LanguageDTO> deleteLanguage(@PathVariable Long id) {
+        languageService.deleteLanguage(id);
+        return ResponseEntity.noContent().build();
     }
 }

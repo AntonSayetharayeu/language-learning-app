@@ -2,17 +2,15 @@ package learningapp.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
+@Builder
 public class LanguageRequestDTO {
-
     @NotBlank
-    private String languageName;
-
-    @NotBlank
-    private String languageCode;
+    private String name;
 }

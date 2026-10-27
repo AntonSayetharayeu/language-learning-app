@@ -1,17 +1,18 @@
 package learningapp.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
-@Getter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class MessageRequestDTO {
-
+    @NotNull
+    private Long chatId;
+    @NotNull
+    private Long senderId;
     @NotBlank
-    private String messageContent;
-
-    @NotBlank
-    private Long messageChatId;
-
-    @NotBlank
-    private Long messageSenderId;
+    private String text;
 }

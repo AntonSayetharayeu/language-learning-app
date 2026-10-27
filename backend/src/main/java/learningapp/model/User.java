@@ -1,45 +1,37 @@
 package learningapp.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import learningapp.model.base.ModelClass;
-import learningapp.model.enums.UserRole;
-import learningapp.model.jointable.ChatUser;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import learningapp.model.enums.Role;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity
-@Table(name = "\"app_user\"")
+@AllArgsConstructor
+@SuperBuilder
 public class User extends ModelClass {
-    @Column(unique = true)
-    private String username;
 
-    @Email
-    private String email;
+    @Column(unique = true, nullable = false)
+    private String login;
 
+    @Column(nullable = false)
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private UserRole role;
+    @Column(nullable = false)
+    private Role role;
 
-    @OneToOne
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Profile profile;
 
-    @OneToMany(mappedBy = "user")
-    private List<ChatUser> chatUserList;
-
-    public User(Long id) {
-        super(id);
-    }
-
-    @Override
-    public String toString() {
-        return String.format("%s Email: %s", username, email);
-    }
+    @OneToMany(mappedBy = "initiator", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Submission> submissions = new ArrayList<>();
 }

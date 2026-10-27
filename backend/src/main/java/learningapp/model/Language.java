@@ -1,25 +1,19 @@
 package learningapp.model;
 
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import learningapp.model.base.ModelClass;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
+@Entity
+@Table(name = "languages")
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity
-@AttributeOverride(name = "createdAt", column = @Column(name = "added_at")) //Use createdAt as addedAt in DB.
+@AllArgsConstructor
+@SuperBuilder
 public class Language extends ModelClass {
 
+    @Column(unique = true, nullable = false)
     private String name;
-
-    private String code;
-
-    public Language(Long id) {
-        super(id);
-    }
 }

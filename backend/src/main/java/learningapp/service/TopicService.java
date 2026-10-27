@@ -1,59 +1,65 @@
 package learningapp.service;
 
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
+import learningapp.dto.request.TopicRequestDTO;
+import learningapp.dto.response.TopicResponseDTO;
+import learningapp.mapper.TopicMapper;
 import learningapp.model.Topic;
 import learningapp.repository.TopicRepository;
-import learningapp.service.interfaces.ITopicService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
-public class TopicService implements ITopicService {
+@RequiredArgsConstructor
+public class TopicService {
 
     private final TopicRepository topicRepository;
+    private final TopicMapper topicMapper;
 
-    @Autowired
-    public TopicService(TopicRepository topicRepository){
-        this.topicRepository = topicRepository;
+    @Transactional
+    public List<TopicResponseDTO> getAllTopics() {
+        return topicRepository.findAll().stream()
+                .map(topicMapper::toTopicDTO)
+                .collect(Collectors.toList());
     }
 
-    @Override
-    public List<Topic> findAllTopics() {
-        return topicRepository.findAll();
+    @Transactional
+    public TopicResponseDTO addTopic(TopicRequestDTO dto) {
+        Topic topic = Topic.builder()
+                .text(dto.getText())
+                .category(dto.getCategory())
+                .build();
+
+        return topicMapper.toTopicDTO(topicRepository.save(topic));
     }
 
-    @Override
-    public Optional<Topic> findTopicById(Long id) {
-        return topicRepository.findById(id);
+    @Transactional
+    public List<TopicResponseDTO> getTopicsByCategory(String categoryLabel) {
+        return topicRepository.findByCategory(categoryLabel).stream()
+                .map(topicMapper::toTopicDTO)
+                .collect(Collectors.toList());
     }
 
-    @Override
-    public Topic createTopic(Topic topic) {
-        return topicRepository.save(topic);
-    }
-
-    @Override
-    public Topic updateTopic(Long id, Topic topic) {
+    @Transactional
+    public TopicResponseDTO updateTopic(Long id, TopicRequestDTO dto) {
         Topic existingTopic = topicRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Topic not found"));
 
-        existingTopic.setTitle(topic.getTitle());
-        existingTopic.setDescription(topic.getDescription());
-        existingTopic.setStatus(topic.getStatus());
-
-        return topicRepository.save(existingTopic);
+        topicMapper.updateTopicFromDto(dto, existingTopic);
+        return topicMapper.toTopicDTO(topicRepository.save(existingTopic));
     }
 
-    @Override
-    public Optional<Topic> deleteTopicById(Long id) {
-        return topicRepository.findById(id)
-                .map(topic -> {
-                    topicRepository.delete(topic);
-                    return topic;
-                });
+    @Transactional
+    public void deleteTopic(Long id) {
+        if (!topicRepository.existsById(id)) {
+            throw new EntityNotFoundException("Topic not found");
+        }
+        topicRepository.deleteById(id);
     }
 }

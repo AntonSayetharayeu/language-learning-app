@@ -2,35 +2,41 @@ package learningapp.model;
 
 import jakarta.persistence.*;
 import learningapp.model.base.ModelClass;
-import learningapp.model.enums.ChatType;
-import learningapp.model.jointable.ChatUser;
-import learningapp.model.jointable.TopicChat;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Table(name = "chats")
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity
+@AllArgsConstructor
+@SuperBuilder
 public class Chat extends ModelClass {
 
-    private String name;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lecturer_id", nullable = false)
+    private User lecturer;
 
-    private ChatType chatType;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_id", nullable = false)
+    private User student;
 
-    @OneToMany(mappedBy = "chat")
-    private List<ChatUser> chatUsers;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "learning_language_id", nullable = false)
+    private Language learning;
 
-    @OneToMany(mappedBy = "chat")
-    private List<TopicChat> chatTopics;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "native_language_id", nullable = false)
+    private Language nativeLanguage;
 
-    @OneToMany(mappedBy = "chat")
-    private List<Message> chatMessages;
+    @Column(nullable = false)
+    private boolean isActive;
 
-    public Chat(Long id) {
-        super(id);
-    }
+    @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Message> messages = new ArrayList<>();
 }

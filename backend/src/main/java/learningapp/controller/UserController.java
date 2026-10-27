@@ -1,62 +1,46 @@
 package learningapp.controller;
 
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import learningapp.dto.request.UserRegistrationRequestDTO;
+import learningapp.dto.response.UserResponseDTO;
+import learningapp.service.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import learningapp.dto.request.RegisterDTO;
-import learningapp.dto.request.UserUpdateDTO;
-import learningapp.dto.responce.UserDTO;
-import learningapp.mapper.UserMapper;
-import learningapp.service.interfaces.IUserService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/user")
-public class UserController {
+@RequestMapping("/api/users")
+@RequiredArgsConstructor
+public class UserController { //User and Profile
 
-    //TODO: prepare work for mapper and adjust Service layer.
-    private final IUserService userService;
-    private final UserMapper userMapper;
-
-    @Autowired
-    public UserController(IUserService userService, UserMapper userMapper) {
-        this.userService = userService;
-        this.userMapper = userMapper;
-    }
+    private final UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<UserDTO> registerUser(@Valid @RequestBody RegisterDTO request) {
-        return ResponseEntity.ok(userService.createUser(request));
+    public ResponseEntity<UserResponseDTO> register(@Valid @RequestBody UserRegistrationRequestDTO dto) {
+        return ResponseEntity.ok(userService.register(dto));
     }
 
-    @GetMapping
-    public ResponseEntity<List<UserDTO>> getAllUsers() {
-        return ResponseEntity.ok(userService.findAllUsers());
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestParam String login, @RequestParam String password) {
+        return ResponseEntity.ok(userService.login(login, password));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getUserByID(@PathVariable Long id) {
-        return userService.findUserById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.getUserById(id));
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserUpdateDTO request) { //PathVariable
-        UserDTO response = userService.updateUser(id, request);
-        return ResponseEntity.ok(response);
+    @GetMapping("/role/{role}")
+    public ResponseEntity<List<UserResponseDTO>> getUsersByRole(@PathVariable String role) {
+        return ResponseEntity.ok(userService.getUsersByRole(role));
     }
 
-    @DeleteMapping("/remove/{id}")
-    public ResponseEntity<Void> removeUser(@PathVariable Long id) {
-        boolean userDeleted = userService.deleteUserById(id);
-
-        if (userDeleted){
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 }

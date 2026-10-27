@@ -1,16 +1,22 @@
 package learningapp.dto.request;
 
-import learningapp.model.enums.ChatType;
-import lombok.Getter;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.List;
-
-@Getter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ChatRequestDTO {
-
-    private String chatName;
-
-    private ChatType chatType;
-
-    private List<Long> chatParticipantsIds;
+    @NotNull
+    private Long lecturerId;
+    @NotNull
+    private Long studentId;
+    @NotNull
+    private Long learningId;
+    @NotNull
+    private Long nativeLanguageId;
 }

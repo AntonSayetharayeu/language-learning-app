@@ -1,35 +1,30 @@
 package learningapp.mapper;
 
+import learningapp.dto.response.UserResponseDTO;
+import learningapp.model.Language;
+import learningapp.model.Profile;
+import learningapp.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import learningapp.dto.request.RegisterDTO;
-import learningapp.dto.request.UserUpdateDTO;
-import learningapp.dto.responce.LoggedUserDTO;
-import learningapp.dto.responce.UserDTO;
-import learningapp.model.User;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-    @Mapping(source = "userName", target = "username")
-    @Mapping(source = "userEmail", target = "email")
-    @Mapping(source = "userPassword", target = "password")
-    @Mapping(source = "userRole", target = "role")
-    User toEntity(RegisterDTO dto);
 
-    @Mapping(source = "id", target = "userID")
-    @Mapping(source = "username", target = "userName")
-    @Mapping(source = "email", target = "userEmail")
-    @Mapping(source = "createdAt", target = "userCreatedAt")
-    @Mapping(source = "role", target = "userRole")
-    UserDTO toResponseDTO(User user);
+    @Mapping(source = "user.id", target = "id")
+    @Mapping(source = "user.login", target = "login")
+    @Mapping(source = "user.role", target = "role")
+    @Mapping(source = "profile.username", target = "username")
+    @Mapping(source = "profile.imgUrl", target = "imgUrl")
+    @Mapping(target = "knownLanguages", expression = "java(mapLanguagesToIds(profile.getKnownLanguages()))")
+    @Mapping(target = "languagesToLearn", expression = "java(mapLanguagesToIds(profile.getLanguagesToLearn()))")
+    @Mapping(target = "rating", ignore = true) //It requires calculation
+    UserResponseDTO toUserDTO(User user, Profile profile);
 
-    @Mapping(source = "id", target = "userID")
-    @Mapping(source = "username", target = "userName")
-    LoggedUserDTO toLoggedResponseDTO(User user);
-
-    @Mapping(source = "userName", target = "username")
-    @Mapping(source = "userEmail", target = "email")
-    @Mapping(source = "userPassword", target = "password")
-    void updateUserFromDto(UserUpdateDTO dto, @MappingTarget User user);
+    default Set<Long> mapLanguagesToIds(Set<Language> languages) {
+        if (languages == null) return null;
+        return languages.stream().map(Language::getId).collect(Collectors.toSet());
+    }
 }

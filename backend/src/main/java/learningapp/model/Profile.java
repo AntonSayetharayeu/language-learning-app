@@ -1,29 +1,46 @@
 package learningapp.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import learningapp.model.base.ModelClass;
-import learningapp.model.enums.ProfileGender;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@Table(name = "profiles")
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity
+@AllArgsConstructor
+@SuperBuilder
 public class Profile extends ModelClass {
 
-    private String imageUrl;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    private User user;
 
-    private String bio;
+    @Column(nullable = false)
+    private String username;
 
-    @Enumerated(EnumType.STRING)
-    private ProfileGender gender;
+    private String imgUrl;
 
-    public Profile(Long id) {
-        super(id);
-    }
+    @ManyToMany
+    @JoinTable(
+            name = "profile_known_languages",
+            joinColumns = @JoinColumn(name = "profile_id"),
+            inverseJoinColumns = @JoinColumn(name = "language_id")
+    )
+    @Builder.Default
+    private Set<Language> knownLanguages = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "profile_languages_to_learn",
+            joinColumns = @JoinColumn(name = "profile_id"),
+            inverseJoinColumns = @JoinColumn(name = "language_id")
+    )
+    @Builder.Default
+    private Set<Language> languagesToLearn = new HashSet<>();
 }

@@ -1,58 +1,66 @@
 package learningapp.service;
 
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
+import learningapp.dto.common.LanguageDTO;
+import learningapp.dto.request.LanguageRequestDTO;
+import learningapp.mapper.LanguageMapper;
 import learningapp.model.Language;
 import learningapp.repository.LanguageRepository;
-import learningapp.service.interfaces.ILanguageService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
-public class LanguageService implements ILanguageService {
+@RequiredArgsConstructor
+public class LanguageService {
 
-    private LanguageRepository languageRepository;
+    private final LanguageRepository languageRepository;
+    private final LanguageMapper languageMapper;
 
-    @Autowired
-    public LanguageService(LanguageRepository languageRepository) {
-        this.languageRepository = languageRepository;
+    @Transactional
+    public List<LanguageDTO> getAllLanguages() {
+        return languageRepository.findAll().stream()
+                .map(languageMapper::toLanguageDTO)
+                .collect(Collectors.toList());
     }
 
-    @Override
-    public List<Language> findAllLanguages() {
-        return languageRepository.findAll();
+    @Transactional
+    public LanguageDTO getLanguageById(Long id) {
+        Language lang = languageRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Chat not found"));
+        return  languageMapper.toLanguageDTO(lang);
     }
 
-    @Override
-    public Optional<Language> findLanguageById(Long id) {
-        return languageRepository.findById(id);
+    @Transactional
+    public LanguageDTO addLanguage(LanguageRequestDTO dto) {
+        if (languageRepository.findByName(dto.getName()).isPresent()) {
+            throw new IllegalArgumentException("Language already exists");
+        }
+
+        Language language = Language.builder()
+                .name(dto.getName())
+                .build();
+
+        return languageMapper.toLanguageDTO(languageRepository.save(language));
     }
 
-    @Override
-    public Language createLanguage(Language language) {
-        return languageRepository.save(language);
+    @Transactional
+    public LanguageDTO updateLanguage(Long id, LanguageRequestDTO dto) {
+        Language language = languageRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Language not found"));
+
+        languageMapper.updateLanguageFromDto(dto, language);
+        return languageMapper.toLanguageDTO(languageRepository.save(language));
     }
 
-    @Override
-    public Language updateLanguage(Long id, Language language) {
-        Language existingLanguage = languageRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Language not found"));
-
-        existingLanguage.setName(language.getName());
-        existingLanguage.setCode(language.getCode());
-
-        return languageRepository.save(existingLanguage);
-    }
-
-    @Override
-    public Optional<Language> deleteLanguageById(Long id) {
-        return languageRepository.findById(id)
-                .map(language -> {
-                    languageRepository.delete(language);
-                    return language;
-                });
+    @Transactional
+    public void deleteLanguage(Long id) {
+        if (!languageRepository.existsById(id)) {
+            throw new EntityNotFoundException("Language not found");
+        }
+        languageRepository.deleteById(id);
     }
 }
